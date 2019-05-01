@@ -1,0 +1,12 @@
+{
+	"rules": {
+		"locale": {
+			"parts": ["locale_general", "locale_dialogs", "locale_relics"],
+			"save_param": {
+				"separate_langs": [
+					"ru", "en"
+				]
+			}
+		}
+	}
+}

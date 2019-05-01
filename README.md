@@ -1,0 +1,1 @@
+CLI software for automated processing and save data from Google Sheets
