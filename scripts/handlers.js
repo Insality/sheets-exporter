@@ -31,9 +31,6 @@ const handlers = {
 	// добавляет имя перед всем json
 	set_name: set_name,
 
-	// translate map {"1": {}, "2": {}} to list
-	find_array_map: find_array_map,
-
 	// Делает массив из указанных элементов json
 	field_to_array: field_to_array,
 
@@ -45,8 +42,7 @@ const handlers = {
 	array_to_map: array_to_map,
 
 
-	/// End json handlers. Меняет структуру данных
-
+	/// Should be as last handler. Change the json structure
 	// возвращает список, вытаскивая из каждой записи опр. поле
 	values_list: values_list,
 
@@ -54,11 +50,9 @@ const handlers = {
 	to_list: to_list,
 
 
-	/// For rows
-
+	/// Prehandlers
 	// Add index as first element to each row. "1", "2" etc
 	add_id: add_id
-
 }
 
 function add_id(data, config) {
@@ -108,12 +102,6 @@ function extract_id(data, config) {
 			if (is_all_values_empty) {
 				delete new_json[key + postfix]
 			}
-
-			if (config.add_locales) {
-				for (let i = 0; i < gconfig.additional_languages.length; i++) {
-					o[gconfig.additional_languages[i]] = ""
-				}
-			}
 		}
 	}
 
@@ -159,31 +147,6 @@ function field_to_array(data, config) {
 		}
 
 	}
-	return data
-}
-
-function _change_map_to_array_rec(data) {
-	for (let key in data) {
-		let record = data[key]
-
-		if (typeof(record) == "object") {
-			let len = Object.keys(record).length
-			if (record[1] !== undefined && record[len] !== undefined) {
-				// value is need to convert to array
-				let array = []
-				for (let i = 1; i <= len; i++) {
-					array.push(record[i])
-				}
-				data[key] = array
-			}
-
-			_change_map_to_array_rec(data[key])
-		}
-	}
-}
-
-function find_array_map(data, config) {
-	_change_map_to_array_rec(data)
 	return data
 }
 

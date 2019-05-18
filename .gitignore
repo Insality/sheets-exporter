@@ -63,3 +63,5 @@ typings/
 
 # Sheets-exporter
 auth/
+config/
+dist/

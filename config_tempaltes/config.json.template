@@ -1,0 +1,13 @@
+{
+	"sheets":[
+	{
+		"name": "config",
+		"type": "csv_web",
+		"id": "1zMW_3dB73O--rUQ0zLlpco6RcvGNe9x-pN8qC3pqH9w",
+		"rule": "../config/rules_config.json",
+		"save": [{
+			"dist": "./dist/",
+			"format": "lua"
+		}]
+	}]
+}
