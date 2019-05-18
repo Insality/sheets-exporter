@@ -1,24 +1,32 @@
+
 # Sheets Exporter
 #### by Insality
 
 Sheets Exporter - CLI software for automated processing and save data from Google Sheets
 
-Readme in process
+Readme and software in process.
 
 ## Install
 Download repository
 Run `npm install` to install dependencies
+
 Make simple config (see config section)
+
 Run `bash run.sh`. It will ask you to go web url for download **credentials.json**. Store it in `./auth/credentials.json`
+
 Run second time, it will ask you go to another web url to get the token. Give access in your browser and copy token. Past it in console (just make what exporter ask you)
 
 ## Config
-There is `config.json` file, main file for check what you need to export. You can make several of it and point needed config in `bash run.sh`. Default config file with name `config.json`
+There is `config.json` file, main file for check what you need to export. You can make several of it and point needed config in `bash run.sh`. 
+
+Default config file with name `config.json`
 
 Config examples stores in `./config_templates`
+
 Make config file in `/config/config.json`
+
 It's look like:
-```json
+```js
 {
 	"sheets":[
 	{
@@ -34,8 +42,9 @@ It's look like:
 }
 ```
 Rules for document looks like:
+
 Full handlers list see below
-```json
+```js
 {
 	"rules": {
 		"relics_sets": { // Name of sheet config.
@@ -76,31 +85,49 @@ Full handlers list see below
 		}
 	}
 }
-
 ```
 
 ### Handlers
 
 #### Prehandlers
-- add_id
+- **add_id**: Add numeric id as first value of every row. Use it if you have non unique keys and you want make list from this document
+	*params*:
+	*example*:
 
 #### Handlers
-- extract_id
-- add_id_as_field
-- union_fields
-- union_by
-- convert_array
-- convert_field
-- nest_data
-- set_name
-- field_to_array
-- tuple_to_array
-- array_to_map
+- **extract_id**: Make many records from one by splitting it with different fields. Useful for localization
+	*params*:
+	*example*:
+- **add_id_as_field**: Add key of the record to record data
+	*params*:
+	*example*:
+- **union_fields**: Make array from pointed fields
+	*params*:
+	*example*:
+- **union_by**: group records by field. This field will be on upper level of json struct. Can be recursive
+	*params*:
+	*example*:
+- **convert_array**:  Make array from strings like `<26, 36, 42>` to [26, 36, 42]
+	*params*:
+	*example*:
+- **convert_field** Format values by some rules. For example: percents
+	*params*:
+	*example*:
+- **nest_data**: Union pointed fields to json with pointed key
+	*params*:
+	*example*:
+- **set_name**: Add name before all json. It will change json struct. Usually use before saving
+	*params*:
+	*example*:
 
 #### Last handlers
 Should be last, because change the structure of json
-- values_list
-- to_list
+- **values_list**: Make a list of values of some field
+	*params*:
+	*example*:
+- **to_list**: Make list instead of dictionary
+	*params*:
+	*example*:
 
 
 ### TODO:

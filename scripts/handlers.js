@@ -31,12 +31,6 @@ const handlers = {
 	// добавляет имя перед всем json
 	set_name: set_name,
 
-	// Делает массив из указанных элементов json
-	field_to_array: field_to_array,
-
-	// кортеж в массив структур для протобафа
-	tuple_to_array: tuple_to_array,
-
 	// превращает список элемента json в мапу. Ключи указаны в конфиге
 	// в нужном порядке
 	array_to_map: array_to_map,
@@ -132,24 +126,6 @@ function convert_field(data, config) {
 	return data
 }
 
-// если значение поля скалярно, то превращает его в массив из 1 элемента
-function field_to_array(data, config) {
-	for (let key in data) {
-		let record = data[key]
-		for (let i in config.fields) {
-			if (!record.hasOwnProperty([config.fields[i]])){
-				continue
-			}
-			let value = record[config.fields[i]]
-			if (typeof(value) !== "object"){
-				record[config.fields[i]] = [value]
-			}
-		}
-
-	}
-	return data
-}
-
 function array_to_map(data, config){
 	for (let key in data) {
 		let record = data[key]
@@ -167,53 +143,6 @@ function array_to_map(data, config){
 			}
 			record[config[i].field] = array
 		}
-	}
-	return data
-}
-
-//part of tuple to array implementation
-function tuple_to_array_impl(array){
-	for (let j in array) {
-		var new_json = {}
-		if (typeof(array[j]) == "string") {
-			new_json.param_string = array[j]
-		}
-		if (typeof(array[j]) == "number") {
-			if (Math.floor(array[j]) === array[j]){
-				new_json.param_sint = array[j]
-			}
-			else{
-				new_json.param_double = array[j]
-			}
-		}
-		array[j] = new_json
-	}
-	return array
-}
-
-//part of tuple to array implementation
-function tuple_to_array_process(data, config){
-	for (let i in config.fields) {
-		if ( !data.hasOwnProperty([config.fields[i]]) ){
-			continue
-		}
-		let value = data[config.fields[i]]
-
-		if (typeof(value) !== "object"){
-			continue
-		}
-		data[config.fields[i]] = tuple_to_array_impl(value)
-	}
-	return data
-}
-
-function tuple_to_array(data, config) {
-  if (config.hasOwnProperty("direct")) {
-    return tuple_to_array_process(data, config)
-	}
-
-	for (let key in data) {
-		data[key] = tuple_to_array_process(data[key], config)
 	}
 	return data
 }
