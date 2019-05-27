@@ -106,36 +106,4 @@ M.process_sheet = function(sheet, special_rule) {
 }
 
 
-M.prepare_locale_csv = function(filename, path, format) {
-	let file_path = path + filename + format
-	convertor.csv2rows(file_path, (rows) => {
-		if (rows.length <= 0) {
-			console.log("[ERROR]: no rows in csv: " + file_path)
-		}
-		let header = rows[0]
-
-		for (let i = 1; i < header.length; i++) {
-			let language = header[i]
-			let lang_path = path + language + "/"
-			if (!fs.existsSync(lang_path)){
-				fs.mkdirSync(lang_path);
-			}
-
-			// prepare file for selected lang
-			let json_data = []
-			for (let j = 1; j < rows.length; j++) {
-				json_data.push({
-					"id": rows[j][0],
-					"translation": rows[j][i]
-				})
-			}
-
-			// write file to path
-			saver.save(json_data, lang_path, filename, "json")
-		}
-		fs.unlinkSync(file_path) // delete file
-	})
-}
-
-
 module.exports = M

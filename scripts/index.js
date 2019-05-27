@@ -1,12 +1,22 @@
-const config = require("../config/config")
 const processor = require("./processor")
 const unzip = require("unzip")
 const fs = require("fs")
 const rimraf = require("rimraf");
 
 
-function download_export(sheet, rule_name) {
-	console.log("Start export data:")
+function download_export(config_path, sheet, rule_name) {
+	config_path = config_path || "config"
+	config_path = "../config/" + config_path
+
+	if (sheet == "undefined") {
+		sheet = null
+	}
+	if (rule_name == "undefined") {
+		rule_name = null
+	}
+
+	const config = require(config_path)
+	console.log("Start export data. Config: " + (config_path))
 	console.log(sheet || "all sheets,", rule_name || "all rules")
 
 	let is_token_exist = fs.existsSync("./auth/token.json")
@@ -16,7 +26,7 @@ function download_export(sheet, rule_name) {
 			console.log("Need to auth to create the token.json")
 			console.log("Process only one sheet to get auth...")
 			console.log("Please restart the export to process all config")
-			return
+			return 0
 		}
 		setTimeout(() => {
 			if (!sheet) {
@@ -28,30 +38,6 @@ function download_export(sheet, rule_name) {
 			}
 		}, 750 * i)
 	}
-}
-
-function prepare_locale() {
-	console.log("Start preparing locales...")
-
-	const file_list = [
-		"quests",
-		"ui",
-		"buildings",
-		"items",
-		"shop",
-		"resources"
-	]
-
-	rimraf.sync("./dist/ready_locales/") // like rm -rf
-
-	fs.createReadStream('./dist/ready_locales.zip')
-		.pipe(unzip.Extract({ path: './dist/ready_locales' }))
-		.on('close', function (err) {
-			for (let i = 0; i < file_list.length; i++) {
-				processor.prepare_locale_csv(file_list[i], "./dist/ready_locales/", ".csv")
-			}
-			console.log("End of export ready locales")
-	});
 }
 
 function setup() {
@@ -80,12 +66,13 @@ function start() {
 		return
 	}
 
-	let command = process.argv[2] || "export"
+	let config_path = process.argv[2]
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
 
+	let command = "export"
 	if (commands[command]) {
-		commands[command](sheet, rule_name)
+		commands[command](config_path, sheet, rule_name)
 	} else {
 		console.log("Wrong arguments:")
 		console.log("Usage:")

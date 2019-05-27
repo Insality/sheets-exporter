@@ -65,3 +65,4 @@ typings/
 auth/
 config/
 dist/
+run_*.sh

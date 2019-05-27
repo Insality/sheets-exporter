@@ -2,6 +2,7 @@ const convertor = require("../libs/convertor");
 const json2lua = require('json2lua');
 const fs = require('fs');
 const luafmt = require("lua-fmt")
+const beautify = require("json-beautify")
 
 const M = {}
 
@@ -24,7 +25,92 @@ function save_csv(json, path, name, no_beatify) {
 
 function save_json(json, path, name, no_beatify) {
 	let filename = path + name + ".json"
-	write_file(filename, JSON.stringify(json))
+	if (no_beatify) {
+		write_file(filename, JSON.stringify(json))
+	} else {
+		write_file(filename, beautify(json, null, 2, 120))
+	}
+}
+
+function beautify_lua(str) {
+	let formatted = []
+
+	let cur = 0
+	let ident = 0
+	let is_equal = false
+	let is_string = false
+
+	for (let i = 0; i < str.length; i++) {
+		let prev = str[i-1]
+		let next = str[i+1]
+		let char = str[i]
+
+		if (char == "\"") {
+			is_string = !is_string
+		}
+		if (is_string) {
+			formatted[cur] = char
+			cur++
+			continue
+		}
+
+		if (char == "=") {
+			is_equal = true
+		}
+		if (char == "{") {
+			is_equal = false
+			formatted[cur] = char
+			cur++
+			ident++
+			if (next == "}") {
+				continue;
+			}
+			formatted[cur] = "\n"
+			cur++
+
+			for (let j = 0; j < ident; j++) {
+				formatted[cur] = "\t"
+				cur++
+			}
+		} else if (char == "}") {
+			is_equal = false
+			if (prev == "{") {
+				formatted[cur] = char
+				cur++
+				is_equal = true
+				ident--
+				continue
+			}
+			ident--
+			formatted[cur] = "\n"
+			cur++
+			
+			for (let j = 0; j < ident; j++) {
+				formatted[cur] = "\t"
+				cur++
+			}
+			formatted[cur] = char
+			cur++
+		} else if (char == ",") {
+			formatted[cur] = char
+			cur++
+			if (is_equal || prev == "}") {
+				is_equal = false
+				formatted[cur] = "\n"
+				cur++
+
+				for (let j = 0; j < ident; j++) {
+					formatted[cur] = "\t"
+					cur++
+				}
+			}
+		} else {
+			formatted[cur] = char
+			cur++
+		}
+	}
+
+	return formatted.join("")
 }
 
 function save_lua(json, path, name, no_beatify) {
@@ -35,12 +121,10 @@ function save_lua(json, path, name, no_beatify) {
 	let lua_data = json2lua.fromObject(json)
 	lua_data = "return " + lua_data
 
-	// do not attempt to beatify quests (long time)
-	if (no_beatify){
+	if (no_beatify) {
 		write_file(filename, lua_data)
-	}
-	else{
-		write_file(filename, luafmt.formatText(lua_data))
+	} else {
+		write_file(filename, beautify_lua(lua_data))
 	}
 }
 
