@@ -1,10 +1,10 @@
 const csv = require("../libs/csv")
 const saver = require("../libs/saver")
+const path = require("path")
 const convertor = require("../libs/convertor")
 const handlers = require("./handlers")
 const fs = require('fs')
 const luaparse = require("luaparse")
-var path = require('path');
 
 
 const M = {}
@@ -55,7 +55,7 @@ function load(sheet, list_rule, cb) {
 }
 
 M.process_sheet = function(sheet, special_rule) {
-	let rule = require(sheet.rule)
+	let rule = JSON.parse(fs.readFileSync(sheet.rule))
 
 	// get csv of selected lists
 	for (let rule_name in rule.rules) {

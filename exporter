@@ -1,0 +1,14 @@
+#!/bin/bash
+### Author: Insality <insality@gmail.com>, 05.2019
+## (c) Insality Games
+##
+## Description:
+## 
+## Usage:
+## 
+
+## 	$1 - config folder
+## 	$2 - specify group
+## 	$3 - specify list
+
+node `dirname $0`/scripts/index.js $1 $2 $3

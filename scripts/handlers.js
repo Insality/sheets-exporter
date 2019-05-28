@@ -1,4 +1,3 @@
-const gconfig = require("../config/config")
 const convertor = require("../libs/convertor")
 const M = {}
 

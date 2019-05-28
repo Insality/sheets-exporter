@@ -1,25 +1,18 @@
 const processor = require("./processor")
 const unzip = require("unzip")
 const fs = require("fs")
+const path = require("path")
 const rimraf = require("rimraf");
 
 
-function download_export(config_path, sheet, rule_name) {
-	config_path = config_path || "config"
-	config_path = "../config/" + config_path
+function download_export(config_folder, sheet, rule_name) {
+	let config_path = "./" + path.join(config_folder, "/config.json")
+	let config = JSON.parse(fs.readFileSync(config_path))
 
-	if (sheet == "undefined") {
-		sheet = null
-	}
-	if (rule_name == "undefined") {
-		rule_name = null
-	}
+	console.log("Start export data. Config: " + config_path)
+	console.log(sheet || "All sheets,", rule_name || "all rules")
 
-	const config = require(config_path)
-	console.log("Start export data. Config: " + (config_path))
-	console.log(sheet || "all sheets,", rule_name || "all rules")
-
-	let is_token_exist = fs.existsSync("./auth/token.json")
+	let is_token_exist = fs.existsSync(path.join(__dirname, "../auth/token.json"))
 
 	for (let i in config.sheets) {
 		if (i > 0 && !is_token_exist) {
@@ -46,7 +39,7 @@ function setup() {
 	console.log()
 	console.log("https://developers.google.com/drive/api/v3/quickstart/nodejs")
 	console.log()
-	console.log("And place credentials in ./auth/credentials.json")
+	console.log("And place credentials in " + path.join(__dirname, "/auth/credentials.json"))
 }
 
 const commands = {
@@ -54,25 +47,23 @@ const commands = {
 }
 
 function start() {
-	console.log("Export tool")
-	if (!fs.existsSync("./dist")) {
-		fs.mkdirSync("./dist");
+	let root_folder = path.join(__dirname, "..")
+	console.log("Export tool. Exporter folder: " + root_folder)
+	if (!fs.existsSync(path.join(root_folder, "auth"))) {
+		fs.mkdirSync(path.join(root_folder, "auth"));
 	}
-	if (!fs.existsSync("./auth")) {
-		fs.mkdirSync("./auth");
-	}
-	if (!fs.existsSync("./auth/credentials.json")) {
+	if (!fs.existsSync(path.join(root_folder, "/auth/credentials.json"))) {
 		setup()
 		return
 	}
 
-	let config_path = process.argv[2]
+	let config_folder = process.argv[2]
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
 
 	let command = "export"
 	if (commands[command]) {
-		commands[command](config_path, sheet, rule_name)
+		commands[command](config_folder, sheet, rule_name)
 	} else {
 		console.log("Wrong arguments:")
 		console.log("Usage:")
