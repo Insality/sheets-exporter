@@ -1,13 +1,4 @@
-const convertor = require("../libs/convertor")
-
-
-function add_id(data, config) {
-	data[0].unshift("id")
-	for (let i = 1; i < data.length; i++) {
-		data[i].unshift(String(i))
-	}
-	return data
-}
+const convertor = require("../../libs/convertor")
 
 
 function add_id_as_field(data, config) {
@@ -55,36 +46,6 @@ function extract_id(data, config) {
 }
 
 
-function values_list(data, config) {
-	let row = []
-
-	for (let key in data) {
-		if (config.is_key) {
-			row.push(key)
-		} else {
-			row.push(data[key][config.id])
-		}
-	}
-
-	return row
-}
-
-
-function convert_field(data, config) {
-	for (let key in data) {
-		let record = data[key]
-
-		if (record[config.id]) {
-			if (config.type == "percent") {
-				record[config.id] = parseFloat(record[config.id])/100
-			}
-		}
-	}
-
-	return data
-}
-
-
 function array_to_map(data, config){
 	for (let key in data) {
 		let record = data[key]
@@ -120,19 +81,32 @@ function union_fields(data, config) {
 				}
 				delete record[config.fields[i]]
 			}
-			record[config.name] = result
+			if (result.length > 0) {
+				record[config.name] = result
+			}
 		}
-
-		if (config.union_type == "table") {
+		if (config.union_type == "map") {
 			let result = {}
+
 			for (let i = 0; i < config.fields.length; i++) {
 				let value = record[config.fields[i]]
+				let field_name = config.fields[i]
+				if (config.alias) {
+					field_name = config.alias[i]
+				}
 				if (value !== 0 && value != null){
-					result[config.fields[i]] = value
+					result[field_name] = value
 				}
 				delete record[config.fields[i]]
 			}
-			record[config.name] = result
+			if (Object.keys(result).length > 0) {
+				if (config.add_fields) {
+					for (let k in config.add_fields) {
+						result[k] = config.add_fields[k]
+					}
+				}
+				record[config.name] = result
+			}
 		}
 	}
 
@@ -140,14 +114,7 @@ function union_fields(data, config) {
 }
 
 
-function set_name(data, config) {
-	let new_data = {}
-	new_data[config.name] = data
-	return new_data
-}
-
-
-function union_by(data, config) {
+function group_by(data, config) {
 	let new_json = {}
 	let fid = config.field_id
 	let list_name = config.list_name
@@ -271,60 +238,86 @@ function convert_array(data, config) {
 }
 
 
-function to_list(data, config) {
-	let new_json = []
+function only_fields(data, config) {
+	let new_json = {}
 
 	for (let key in data) {
-		new_json.push(data[key])
+		new_json[key] = {}
+		for (let j in config.ids) {
+			let id_key = config.ids[j]
+			if (data[key][id_key]) {
+				new_json[key][id_key] = data[key][id_key]
+			}
+		}
 	}
 
 	return new_json
 }
 
 
-module.exports = {
-	/// Обычные обработчики. Они возвращают измененый json
+function remove_fields(data, config) {
+	for (let key in data) {
+		let record = data[key]
+		for (let i in config.fields) {
+			if (record[config.fields[i]]) {
+				delete record[config.fields[i]]
+			}
+		}
+	}
+	return data
+}
 
+
+function rename_fields(data, config) {
+	let keys = config.keys
+	for (let key in data) {
+		// Recursive
+		if (typeof(data[key]) == "object") {
+			data[key] = rename_fields(data[key], config)
+		}
+
+		for (let k in keys) {
+			if (key == k) {
+				// Copy data to delete it from another name
+				data[keys[k]] = JSON.parse(JSON.stringify(data[key]))
+				delete data[key]
+			}
+		}
+	}
+	return data
+}
+
+
+module.exports = {
 	// делит одну запись на несколько, меняя ID и используя указанные из полей
 	// для каждой из них. В ключ дописывается постфикс
 	extract_id: extract_id,
 
-	// добавляет в запись поле с id этой записи
+	// Add record key as value in this record
 	add_id_as_field: add_id_as_field,
 
-	// добавляет все указанные поля в одно поле как массив
-	union_fields: union_fields,
+	// Group elements by key and union records under this key
+	// Can be recursive
+	group_by: group_by,
 
-	// выделяет одно из полей выше уровнем, и все записи с одинаковым значением поля
-	// добавляет в мапу под этим полем. Может быть рекурсивным
-	union_by: union_by,
-
-	// превращает записи вида <16 42> в массив [16, 42]
+	// Convert record like <16 42> to [16, 42] json Array
 	convert_array: convert_array,
 
-	// форматирует по правилам определенное поле в записях (например, указаны проценты)
-	convert_field: convert_field,
-
-	// указанные поля в записи объединяет в массив с указанным ключем
+	// Union pointed fields to map
 	nest_data: nest_data,
 
-	// добавляет имя перед всем json
-	set_name: set_name,
+	// Union fields to map or array. Fields can be renamed
+	union_fields: union_fields,
 
-	// превращает список элемента json в мапу. Ключи указаны в конфиге
-	// в нужном порядке
+	// Transform array value <v1, v2, v3> to map with specific keys
 	array_to_map: array_to_map,
 
+	// Remove all ids except pointed in records
+	only_fields: only_fields,
 
-	/// Should be as last handler. Change the json structure
-	// возвращает список, вытаскивая из каждой записи опр. поле
-	values_list: values_list,
+	// Remove pointed fields in records
+	remove_fields: remove_fields,
 
-	// убирает id у всех записей, превращает данные в массив
-	to_list: to_list,
-
-
-	/// Prehandlers
-	// Add index as first element to each row. "1", "2" etc
-	add_id: add_id
+	// Rename pointed fields in records
+	rename_fields: rename_fields,
 }
