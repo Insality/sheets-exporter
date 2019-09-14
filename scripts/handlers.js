@@ -257,7 +257,7 @@ function make_array(str_val) {
 	str_val = str_val.trim()
 	str_val = str_val.replace(/:/g, " ")
 	str_val = str_val.replace(/,/g, " ")
-	str_val = str_val.replace(/\s\s+/g, ' ');
+	str_val = str_val.replace(/\s\s+/g, ' ')
 	let arr = str_val.split(" ")
 
 	for (let i = 0; i < arr.length; i++) {

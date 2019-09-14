@@ -1,11 +1,14 @@
+const settings = require("../settings")
 const fs = require("fs")
 const path = require("path")
 const readline = require('readline')
 const {google} = require('googleapis')
 
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-const CREDS_PATH = path.join(__dirname, "../auth/credentials.json")
-const TOKEN_PATH = path.join(__dirname, "../auth/token.json")
+const SCOPES = [settings.google_scopes]
+const AUTH_DIR = path.join(__dirname, "..", settings.auth_dir)
+const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
+const CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
+
 
 function getNewToken(oAuth2Client, callback) {
 	const authUrl = oAuth2Client.generateAuthUrl({
@@ -47,7 +50,7 @@ function authorize(credentials, callback) {
 
 // Load client secrets from a local file.
 function auth(callback) {
-	fs.readFile(CREDS_PATH, (err, content) => {
+	fs.readFile(CREDENTIALS_PATH, (err, content) => {
 		if (err) return console.log('Error loading client secret file:', err)
 		// Authorize a client with credentials, then call the Google Sheets API.
 		authorize(JSON.parse(content), callback)

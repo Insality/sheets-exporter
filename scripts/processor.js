@@ -4,14 +4,13 @@ const path = require("path")
 const convertor = require("../libs/convertor")
 const handlers = require("./handlers")
 const fs = require('fs')
-const luaparse = require("luaparse")
 
 
 const M = {}
 
 function readFile(file, filetype, cb, filename) {
 	fs.readFile(file, "utf8", (err, data) => {
-		if (err) throw err;
+		if (err) throw err
 		if (filetype == "json") {
 			cb(JSON.parse(data), filename)
 		}
@@ -25,10 +24,10 @@ function load_file(sheet, rule, cb) {
 	if (rule.dir) {
 		fs.readdir(rule.dir, function(err, items) {
 			for (let i in items) {
-				let basename = path.basename(rule.dir + items[i], "." + rule.type);
+				let basename = path.basename(rule.dir + items[i], "." + rule.type)
 				readFile(rule.dir + items[i], rule.type, cb, basename)
 			}
-		});
+		})
 	}
 }
 
@@ -108,12 +107,6 @@ function start_processing(sheet, special_rule, rule) {
 			for (let j = 0; j < sheet.save.length; j++) {
 				let dist = sheet.save[j].dist
 				let format = sheet.save[j].format
-
-				// save
-				if (!fs.existsSync(dist)){
-					fs.mkdirSync(dist);
-				}
-
 				let clone_json = JSON.parse(JSON.stringify(json_data))
 
 				if (sheet.wrap_with_name) {

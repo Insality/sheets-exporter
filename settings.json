@@ -3,6 +3,7 @@
 	"cache_format": "json",
 	"auth_dir": "./auth",
 	"google_sheets_api_version": "v4",
+	"google_scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 	"credentials_name": "credentials.json",
 	"token_name": "token.json",
 

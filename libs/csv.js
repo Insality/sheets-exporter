@@ -1,3 +1,5 @@
+const settings = require("../settings")
+
 const spreadsheets = require('./spreadsheets')
 const {google} = require('googleapis')
 const convertor = require("./convertor")
@@ -7,28 +9,28 @@ const path = require("path")
 
 const M = {}
 
-let cache_dir = path.join(__dirname, "../.cache/")
+let cache_dir = path.join(__dirname, settings.cache_dir)
 
 function get_csv(list_name, id, on_end) {
-	let path = cache_dir + id + "/" + list_name + ".json"
-	let json_cache = JSON.parse(fs.readFileSync(path, "utf8"))
+	let cached_file = path.join(cache_dir, id, list_name + "." + settings.cache_format)
+	let json_cache = JSON.parse(fs.readFileSync(cached_file, "utf8"))
 
-	let values = json_cache.data;
-	let usedCols = [];
+	let values = json_cache.data
+	let usedCols = []
 
 	for (let i = 0; i < values[0].length; i++) {
 		// Ignore rows, starts with "#" or name is empty
-		if (values[0][i].length > 0 && values[0][i].indexOf('#') !== 0) {
-			usedCols.push(i);
+		if (values[0][i].length > 0 && values[0][i].indexOf(settings.ignore_export_symbol) !== 0) {
+			usedCols.push(i)
 		}
 	}
 
-	let rows = [];
+	let rows = []
 	for (let i = 0; i < values.length; i++) {
-		let row = [];
+		let row = []
 		for (let index of usedCols) {
 			let val = values[i][index]
-			if (val == "-" || val == "none") {
+			if (settings.empty_value_alias.indexOf(val) >= 0) {
 				val = ""
 			}
 
@@ -38,7 +40,7 @@ function get_csv(list_name, id, on_end) {
 
 			val = convertor.check_number(val)
 
-			row.push(val);
+			row.push(val)
 		}
 
 		// если значение из первой колонки начинается с `#`, то игнорим ВСЮ строку
@@ -53,8 +55,8 @@ function get_csv(list_name, id, on_end) {
 			} else {
 				is_all_values_empty = false
 			}
-			if ((typeof row[0] !== "string" || row[0].indexOf('#') !== 0) && !is_all_values_empty) {
-				rows.push(row);
+			if ((typeof row[0] !== "string" || row[0].indexOf(settings.ignore_export_symbol) !== 0) && !is_all_values_empty) {
+				rows.push(row)
 			}
 		}
 	}
@@ -67,10 +69,6 @@ M.save_cache = function(lists, data) {
 	let sheet_id = data.spreadsheetId
 	let values = data.valueRanges
 
-	if (!fs.existsSync(cache_dir)){
-		fs.mkdirSync(cache_dir);
-	}
-
 	for (let i in lists) {
 
 		let listname = lists[i]
@@ -79,7 +77,7 @@ M.save_cache = function(lists, data) {
 			name: listname,
 			data: listdata,
 		}
-		saver.save(jsondata, cache_dir + sheet_id, listname, "json", true)
+		saver.save(jsondata, path.join(cache_dir, sheet_id), listname, settings.cache_format, true)
 	}
 }
 
@@ -110,15 +108,15 @@ M.load_cache = function(sheet, rule, callback) {
 
 M.preload_lists = function(sheet_id, lists, cb) {
 	spreadsheets.auth(function(auth) {
-		const sheets = google.sheets({version: 'v4', auth});
+		const sheets = google.sheets({version: settings.google_sheets_api_version, auth})
 
 		let request = {
 			spreadsheetId: sheet_id,
 			ranges: lists
-		};
+		}
 
 		sheets.spreadsheets.values.batchGet(request, (err, res) => {
-			if (err) return console.log('The API returned an error: ' + err);
+			if (err) return console.log('The API returned an error: ' + err)
 			M.save_cache(lists, res.data)
 			if (cb) {
 				cb()

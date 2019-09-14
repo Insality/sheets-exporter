@@ -11,4 +11,4 @@
 ## 	$2 - specify group
 ## 	$3 - specify list
 
-node `dirname $0`/scripts/index.js $1 $2 $3
+node `dirname $0`/index.js $1 $2 $3

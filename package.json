@@ -1,5 +1,5 @@
 {
-  "name": "sheets-export",
+  "name": "sheets-exporter",
   "version": "1.0.0",
   "description": "CLI software for automated processing and save data from Google Sheets",
   "main": "index.js",
@@ -8,22 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Insality/fa-export.git"
+    "url": "git+https://github.com/Insality/sheets-exporter.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Insality",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Insality/fa-export/issues"
+    "url": "https://github.com/Insality/sheets-exporter/issues"
   },
-  "homepage": "https://github.com/Insality/fa-export#readme",
+  "homepage": "https://github.com/Insality/sheets-exporter#readme",
   "dependencies": {
     "csvtojson": "^2.0.8",
     "googleapis": "^37.2.0",
     "json-beautify": "^1.1.0",
     "json2lua": "^0.3.2",
-    "lua-fmt": "^2.6.0",
-    "luaparse": "^0.2.1",
-    "rimraf": "^2.6.3",
-    "unzip": "^0.1.11"
   }
 }

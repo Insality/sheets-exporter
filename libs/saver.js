@@ -1,7 +1,6 @@
-const convertor = require("../libs/convertor");
-const json2lua = require('json2lua');
-const fs = require('fs');
-const luafmt = require("lua-fmt")
+const convertor = require("../libs/convertor")
+const json2lua = require('json2lua')
+const fs = require('fs')
 const beautify = require("json-beautify")
 
 const M = {}
@@ -63,7 +62,7 @@ function beautify_lua(str) {
 			cur++
 			ident++
 			if (next == "}") {
-				continue;
+				continue
 			}
 			formatted[cur] = "\n"
 			cur++
@@ -129,9 +128,7 @@ function save_lua(json, path, name, no_beatify) {
 }
 
 M.save = function(json, path, name, format, no_beatify) {
-	if (!fs.existsSync(path)){
-		fs.mkdirSync(path);
-	}
+	fs.mkdirSync(path, {recursive: true})
 
 	if (handlers[format]) {
 		handlers[format](json, path, name, no_beatify)
@@ -155,9 +152,7 @@ M.save_param = function(json, path, name, format, param) {
 		path = path + param.folder + "/"
 	}
 
-	if (!fs.existsSync(path)){
-		fs.mkdirSync(path);
-	}
+	fs.mkdirSync(path, {recursive: true})
 
 	// Split json to several files. Fields from original will be deleted
 	if (param.separate) {
