@@ -1,7 +1,16 @@
 {
 	"rules": {
 		"items": {
-			"lists": ["items"]
+			"lists": ["items"],
+			"handlers": [
+				{
+					"type": "add_key",
+					"config": {
+						"id": "test",
+						"value": "bar"
+					}
+				}
+			]
 		},
 
 		"item_list": {

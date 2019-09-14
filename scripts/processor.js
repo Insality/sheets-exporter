@@ -99,6 +99,17 @@ function start_processing(sheet, special_rule, rule) {
 			continue
 		}
 
+		if (sheet.handlers) {
+			let custom_handlers = {}
+			for (let i in sheet.handlers) {
+				let custom_handler = require(sheet.handlers[i])
+				for (let key in custom_handler) {
+					custom_handlers[key] = custom_handler[key]
+				}
+			}
+			handlers.set_custom_handlers(custom_handlers)
+		}
+
 		load(sheet, list_rule, (json_data, filename) => {
 			// use correct handler to convert json
 			if (sheet.all_handlers) {

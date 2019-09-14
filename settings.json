@@ -1,5 +1,5 @@
 {
-	"cache_dir": "./cache",
+	"cache_dir": "./.cache",
 	"cache_format": "json",
 	"auth_dir": "./auth",
 	"google_sheets_api_version": "v4",

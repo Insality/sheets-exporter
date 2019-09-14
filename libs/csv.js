@@ -9,7 +9,7 @@ const path = require("path")
 
 const M = {}
 
-let cache_dir = path.join(__dirname, settings.cache_dir)
+let cache_dir = path.join(__dirname, "..", settings.cache_dir)
 
 
 function get_csv(list_name, id, callback) {

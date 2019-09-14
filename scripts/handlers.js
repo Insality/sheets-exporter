@@ -48,6 +48,8 @@ const handlers = {
 	add_id: add_id
 }
 
+let custom_handlers = {}
+
 function add_id(data, config) {
 	data[0].unshift("id")
 	for (let i = 1; i < data.length; i++) {
@@ -308,6 +310,7 @@ function convert_array(data, config) {
 	return data
 }
 
+
 function to_list(data, config) {
 	let new_json = []
 
@@ -318,12 +321,21 @@ function to_list(data, config) {
 	return new_json
 }
 
+
 M.use = function(data, handler) {
-	if (handlers[handler.type]) {
+	if (custom_handlers[handler.type]) {
+		return custom_handlers[handler.type](data, handler.config)
+
+	} else if (handlers[handler.type]) {
 		return handlers[handler.type](data, handler.config)
+
 	} else {
 		console.log("[ERROR]: no config name: " + handler.type)
 	}
+}
+
+M.set_custom_handlers = function(handlers) {
+	custom_handlers = handlers
 }
 
 module.exports = M
