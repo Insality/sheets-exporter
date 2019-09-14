@@ -26,7 +26,6 @@
 			}],
 
 			"save_param": {
-				"filename": "separate",
 				"separate_langs": [
 					"ru", "en"
 				]

@@ -1,4 +1,5 @@
-const convertor = require("../libs/convertor")
+const beautify_lua = require("./beautify_lua")
+const convertor = require("./convertor")
 const json2lua = require('json2lua')
 const fs = require('fs')
 const beautify = require("json-beautify")
@@ -12,16 +13,19 @@ const handlers = {
 	"json": save_json,
 }
 
+
 function write_file(filename, data) {
 	fs.writeFileSync(filename, data)
 	console.log("Saved file: " + filename)
 }
+
 
 function save_csv(json, filepath, name, no_beatify) {
 	let csv_result = convertor.json2csv(json)
 	let filename = path.join(filepath, name + ".csv")
 	write_file(filename, csv_result)
 }
+
 
 function save_json(json, filepath, name, no_beatify) {
 	let filename = path.join(filepath, name + ".json")
@@ -32,86 +36,6 @@ function save_json(json, filepath, name, no_beatify) {
 	}
 }
 
-function beautify_lua(str) {
-	let formatted = []
-
-	let cur = 0
-	let ident = 0
-	let is_equal = false
-	let is_string = false
-
-	for (let i = 0; i < str.length; i++) {
-		let prev = str[i-1]
-		let next = str[i+1]
-		let char = str[i]
-
-		if (char == "\"") {
-			is_string = !is_string
-		}
-		if (is_string) {
-			formatted[cur] = char
-			cur++
-			continue
-		}
-
-		if (char == "=") {
-			is_equal = true
-		}
-		if (char == "{") {
-			is_equal = false
-			formatted[cur] = char
-			cur++
-			ident++
-			if (next == "}") {
-				continue
-			}
-			formatted[cur] = "\n"
-			cur++
-
-			for (let j = 0; j < ident; j++) {
-				formatted[cur] = "\t"
-				cur++
-			}
-		} else if (char == "}") {
-			is_equal = false
-			if (prev == "{") {
-				formatted[cur] = char
-				cur++
-				is_equal = true
-				ident--
-				continue
-			}
-			ident--
-			formatted[cur] = "\n"
-			cur++
-			
-			for (let j = 0; j < ident; j++) {
-				formatted[cur] = "\t"
-				cur++
-			}
-			formatted[cur] = char
-			cur++
-		} else if (char == ",") {
-			formatted[cur] = char
-			cur++
-			if (is_equal || prev == "}") {
-				is_equal = false
-				formatted[cur] = "\n"
-				cur++
-
-				for (let j = 0; j < ident; j++) {
-					formatted[cur] = "\t"
-					cur++
-				}
-			}
-		} else {
-			formatted[cur] = char
-			cur++
-		}
-	}
-
-	return formatted.join("")
-}
 
 function save_lua(json, filepath, name, no_beatify) {
 	// clear json from undefined
@@ -128,6 +52,7 @@ function save_lua(json, filepath, name, no_beatify) {
 	}
 }
 
+
 M.save = function(json, filepath, name, format, no_beatify) {
 	fs.mkdirSync(filepath, {recursive: true})
 
@@ -138,15 +63,16 @@ M.save = function(json, filepath, name, format, no_beatify) {
 	}
 }
 
-function separate_in(data, separate){
-	let new_json = {}
-	for (let j = 0; j < separate.fields.length; j++) {
-		let fkey = separate.fields[j]
-		new_json[fkey] = data[fkey]
-		delete data[fkey]
+
+function wrap_with_name(json, name) {
+	if (name) {
+		let temp_json = {}
+		temp_json[name] = json
+		return temp_json
 	}
-	return new_json
+	return json
 }
+
 
 M.save_param = function(json, filepath, name, format, param) {
 	if (param.folder) {
@@ -154,32 +80,10 @@ M.save_param = function(json, filepath, name, format, param) {
 	}
 	fs.mkdirSync(filepath, {recursive: true})
 
-	// Split json to several files. Fields from original will be deleted
-	if (param.separate) {
-		for (let i = 0; i < param.separate.length; i++) {
-			let separate = param.separate[i]
-			let new_json
-			if(separate.direct){
-				new_json = separate_in(json, separate)
-			}
-			else {
-				if (separate.type == "map") {
-					new_json = {}
-				}
-				if (separate.type == "list") {
-					new_json = []
-				}
-				for (let key in json) {
-					if (separate.type == "map") {
-						new_json[key] = separate_in(json[key], separate)
-					}
-					if (separate.type == "list") {
-						new_json.push(separate_in(json[key], separate))
-					}
-				}
-			}
-			M.save(new_json, filepath, name + separate.postfix, format, param.no_beatify)
-		}
+	json = wrap_with_name(json, param.name)
+
+	if (param.filename) {
+		name = param.filename
 	}
 
 	if (param.separate_langs) {
@@ -199,8 +103,6 @@ M.save_param = function(json, filepath, name, format, param) {
 		return
 	}
 
-	let new_json = {}
-	new_json[param.name] = json
 	M.save(json, filepath, name, format, param.no_beatify)
 }
 

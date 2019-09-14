@@ -6,52 +6,61 @@ const convertor = require("../libs/convertor")
 const handlers = require("./handlers")
 const fs = require('fs')
 
-
 const M = {}
 
-function readFile(file, filetype, cb, filename) {
+
+function read_file(file, filetype, callback, filename) {
 	fs.readFile(file, "utf8", (err, data) => {
 		if (err) throw err
 		if (filetype == "json") {
-			cb(JSON.parse(data), filename)
+			callback(JSON.parse(data), filename)
 		}
 	})
 }
 
 
-function load_file(sheet, rule, cb) {
+function load_file(sheet, rule, callback) {
 	if (rule.file) {
-		readFile(rule.file, rule.type, cb)
+		read_file(rule.file, rule.type, callback)
 	}
 	if (rule.dir) {
 		fs.readdir(rule.dir, function(err, items) {
 			for (let i in items) {
 				let basename = path.basename(rule.dir + items[i], "." + rule.type)
-				readFile(rule.dir + items[i], rule.type, cb, basename)
+				read_file(rule.dir + items[i], rule.type, callback, basename)
 			}
 		})
 	}
 }
 
 
-function load(sheet, list_rule, cb) {
-	if (sheet.type == "file") {
-		load_file(sheet, list_rule, cb)
+function apply_handlers(data, handlers_list) {
+	if (!handlers_list) {
+		return data
 	}
+
+	for (let i in handlers_list) {
+		data = handlers.use(data, handlers_list[i])
+	}
+
+	return data
+}
+
+
+function load(sheet, list_rule, callback) {
+	if (sheet.type == "file") {
+		load_file(sheet, list_rule, callback)
+	}
+
 	if (sheet.type == "csv_web") {
 		csv.load_cache(sheet, list_rule, (rows) => {
-			// union rows
 			let rows_union = convertor.union_rows(rows)
 
-			if (list_rule.prehandlers) {
-				for (let i in list_rule.prehandlers) {
-					rows_union = handlers.use(rows_union, list_rule.prehandlers[i])
-				}
-			}
+			rows_union = apply_handlers(rows_union, list_rule.prehandlers)
 
 			// get the json represent
 			let json_data = convertor.rows2json(rows_union)
-			cb(json_data)
+			callback(json_data)
 		})
 	}
 }
@@ -59,7 +68,6 @@ function load(sheet, list_rule, cb) {
 
 M.process_sheet = function(sheet, special_rule) {
 	let rule_path = path.join(settings.runtime.config_dir, sheet.rule)
-	console.log(rule_path)
 
 	let rule = JSON.parse(fs.readFileSync(rule_path))
 
@@ -91,6 +99,20 @@ M.process_sheet = function(sheet, special_rule) {
 }
 
 
+function check_custom_handlers(sheet) {
+	if (sheet.handlers) {
+		let custom_handlers = {}
+		for (let i in sheet.handlers) {
+			let custom_handler = require(sheet.handlers[i])
+			for (let key in custom_handler) {
+				custom_handlers[key] = custom_handler[key]
+			}
+		}
+		handlers.set_custom_handlers(custom_handlers)
+	}
+}
+
+
 function start_processing(sheet, special_rule, rule) {
 	for (let rule_name in rule.rules) {
 		let list_rule = rule.rules[rule_name]
@@ -99,48 +121,34 @@ function start_processing(sheet, special_rule, rule) {
 			continue
 		}
 
-		if (sheet.handlers) {
-			let custom_handlers = {}
-			for (let i in sheet.handlers) {
-				let custom_handler = require(sheet.handlers[i])
-				for (let key in custom_handler) {
-					custom_handlers[key] = custom_handler[key]
-				}
-			}
-			handlers.set_custom_handlers(custom_handlers)
-		}
+		check_custom_handlers(sheet)
 
 		load(sheet, list_rule, (json_data, filename) => {
-			// use correct handler to convert json
-			if (sheet.all_handlers) {
-				for (let i in sheet.all_handlers) {
-					json_data = handlers.use(json_data, sheet.all_handlers[i])
-				}
-			}
-			if (list_rule.handlers) {
-				for (let i in list_rule.handlers) {
-					json_data = handlers.use(json_data, list_rule.handlers[i])
-				}
-			}
-
-			for (let j = 0; j < sheet.save.length; j++) {
-				let dist = path.join(settings.runtime.config_dir, sheet.save[j].dist)
-				let format = sheet.save[j].format
-				let clone_json = JSON.parse(JSON.stringify(json_data))
-
-				if (sheet.wrap_with_name) {
-					list_rule.save_param = list_rule.save_param || {}
-					list_rule.save_param.name = rule_name
-				}
-
-				filename = filename || rule_name
-				if (list_rule.save_param) {
-					saver.save_param(clone_json, dist, filename, format, list_rule.save_param)
-				} else {
-					saver.save(clone_json, dist, filename, format)
-				}
-			}
+			json_data = apply_handlers(json_data, sheet.all_handlers)
+			json_data = apply_handlers(json_data, list_rule.handlers)
+			save_file(json_data, sheet, list_rule, rule_name, filename)
 		})
+	}
+}
+
+
+function save_file(data, sheet, list_rule, rule_name, filename) {
+	for (let i in sheet.save) {
+		let dist = path.join(settings.runtime.config_dir, sheet.save[i].dist)
+		let format = sheet.save[i].format
+		let clone_json = JSON.parse(JSON.stringify(data))
+
+		if (sheet.wrap_with_name) {
+			list_rule.save_param = list_rule.save_param || {}
+			list_rule.save_param.name = rule_name
+		}
+
+		filename = filename || rule_name
+		if (list_rule.save_param) {
+			saver.save_param(clone_json, dist, filename, format, list_rule.save_param)
+		} else {
+			saver.save(clone_json, dist, filename, format)
+		}
 	}
 }
 
