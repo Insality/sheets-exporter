@@ -1,0 +1,36 @@
+{
+	"rules": {
+		"locales": {
+			"lists": ["ui", "skills"],
+
+			"save_param": {
+				"filename": "locales",
+				"separate_langs": [
+					"ru", "en"
+				]
+			}
+		},
+
+		"locales_with_extract": {
+			"lists": ["items"],
+
+			"handlers": [{
+				"type": "extract_id",
+				"config": {
+					"keys": ["en", "ru"],
+					"ids": {
+						"_name": ["en_name", "ru_name"],
+						"_desc": ["en_desc", "ru_desc"]
+					}
+				}
+			}],
+
+			"save_param": {
+				"filename": "separate",
+				"separate_langs": [
+					"ru", "en"
+				]
+			}
+		}
+	}
+}

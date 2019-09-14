@@ -11,5 +11,16 @@
 			"dist": "./basic_export/",
 			"format": "json"
 		}]
+	},
+	{
+		"name": "locales",
+		"type": "csv_web",
+		"id": "1HOF5pJ8UsuvWUK_WmzAcXTUc0YRY0MjF0P83T6fFOPQ",
+		"rule": "./rules_locales.json",
+
+		"save": [{
+			"dist": "./basic_locales/",
+			"format": "json"
+		}]
 	}]
 }

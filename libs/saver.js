@@ -159,10 +159,10 @@ M.save_param = function(json, filepath, name, format, param) {
 		for (let i = 0; i < param.separate.length; i++) {
 			let separate = param.separate[i]
 			let new_json
-			if(separate.hasOwnProperty("direct")){
+			if(separate.direct){
 				new_json = separate_in(json, separate)
 			}
-			else{
+			else {
 				if (separate.type == "map") {
 					new_json = {}
 				}
@@ -178,7 +178,7 @@ M.save_param = function(json, filepath, name, format, param) {
 					}
 				}
 			}
-			M.save(new_json, filepath, name + separate.postfix, format, param.name, param.hasOwnProperty("no_beatify"))
+			M.save(new_json, filepath, name + separate.postfix, format, param.no_beatify)
 		}
 	}
 
@@ -189,7 +189,11 @@ M.save_param = function(json, filepath, name, format, param) {
 			for (let key in json) {
 				new_json[key] = json[key][langs[i]]
 			}
-			M.save(new_json, filepath, langs[i], format, param.name, param.hasOwnProperty("no_beatify"))
+			let filename = langs[i]
+			if (param.filename) { 
+				filename = param.filename + "_" + langs[i]
+			}
+			M.save(new_json, filepath, filename, format, param.no_beatify)
 		}
 		// dont save locales itself
 		return
@@ -197,7 +201,7 @@ M.save_param = function(json, filepath, name, format, param) {
 
 	let new_json = {}
 	new_json[param.name] = json
-	M.save(json, filepath, name, format, param.name, param.hasOwnProperty("no_beatify"))
+	M.save(json, filepath, name, format, param.no_beatify)
 }
 
 
