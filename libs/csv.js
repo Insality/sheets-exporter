@@ -11,7 +11,8 @@ const M = {}
 
 let cache_dir = path.join(__dirname, settings.cache_dir)
 
-function get_csv(list_name, id, on_end) {
+
+function get_csv(list_name, id, callback) {
 	let cached_file = path.join(cache_dir, id, list_name + "." + settings.cache_format)
 	let json_cache = JSON.parse(fs.readFileSync(cached_file, "utf8"))
 
@@ -43,7 +44,7 @@ function get_csv(list_name, id, on_end) {
 			row.push(val)
 		}
 
-		// если значение из первой колонки начинается с `#`, то игнорим ВСЮ строку
+		// Ignore row, if starts from ignore symbol
 		if (row[0]) {
 			var is_all_values_empty = true
 			if (usedCols.length > 1) {
@@ -61,7 +62,7 @@ function get_csv(list_name, id, on_end) {
 		}
 	}
 
-	on_end(rows)
+	callback(rows)
 }
 
 
@@ -83,30 +84,19 @@ M.save_cache = function(lists, data) {
 
 
 M.load_cache = function(sheet, rule, callback) {
-	let download_counter = 0
-	let lists = rule.parts
-
-	// download in order
 	let all_data = []
-	let cur_index = 0
-	let queue_callback
-	queue_callback = function() {
-		get_csv(lists[cur_index], sheet.id, (data) => {
-			download_counter--
+
+	for (let i in rule.lists) {
+		get_csv(rule.lists[i], sheet.id, (data) => {
 			all_data.push(data)
-			if (download_counter > 0) {
-				cur_index++
-				queue_callback()
-			} else {
-				callback(all_data)
-			}
 		})
 	}
-	queue_callback()
+
+	callback(all_data)
 }
 
 
-M.preload_lists = function(sheet_id, lists, cb) {
+M.preload_lists = function(sheet_id, lists, callback) {
 	spreadsheets.auth(function(auth) {
 		const sheets = google.sheets({version: settings.google_sheets_api_version, auth})
 
@@ -118,9 +108,7 @@ M.preload_lists = function(sheet_id, lists, cb) {
 		sheets.spreadsheets.values.batchGet(request, (err, res) => {
 			if (err) return console.log('The API returned an error: ' + err)
 			M.save_cache(lists, res.data)
-			if (cb) {
-				cb()
-			}
+			callback()
 		})
 	})
 }

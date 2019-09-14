@@ -4,9 +4,9 @@ const processor = require("./scripts/processor")
 const fs = require("fs")
 const path = require("path")
 
-let AUTH_DIR = path.join(__dirname, settings.auth_dir)
-let TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
-let CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
+const AUTH_DIR = path.join(__dirname, settings.auth_dir)
+const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
+const CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
 
 
 function download_export(config_path, sheet, rule_name) {
@@ -24,17 +24,17 @@ function download_export(config_path, sheet, rule_name) {
 			console.log("Please restart the export to process all config")
 			return 0
 		}
-		setTimeout(() => {
-			if (!sheet) {
+
+		if (!sheet) {
+			processor.process_sheet(config.sheets[i], rule_name)
+		} else {
+			if (sheet == config.sheets[i].name) {
 				processor.process_sheet(config.sheets[i], rule_name)
-			} else {
-				if (sheet == config.sheets[i].name) {
-					processor.process_sheet(config.sheets[i], rule_name)
-				}
 			}
-		}, 750 * i)
+		}
 	}
 }
+
 
 function setup() {
 	console.log("Start setup of sheets-exportes")
@@ -45,9 +45,11 @@ function setup() {
 	console.log("And place credentials in " + CREDENTIALS_PATH)
 }
 
+
 const commands = {
 	"export": download_export,
 }
+
 
 function start() {
 	let root_folder = path.join(__dirname)
@@ -64,13 +66,15 @@ function start() {
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
 
+	settings.runtime.config_dir = path.dirname(config_path)
+
 	let command = "export"
 	if (commands[command]) {
 		commands[command](config_path, sheet, rule_name)
 	} else {
 		console.log("Wrong arguments:")
 		console.log("Usage:")
-		console.log("run.sh export [sheet_name] [rule_name] # for export data from google drive")
+		console.log("run.sh [sheet_name] [rule_name] # for export data from google drive")
 	}
 }
 

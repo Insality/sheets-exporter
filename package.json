@@ -18,8 +18,9 @@
   "homepage": "https://github.com/Insality/sheets-exporter#readme",
   "dependencies": {
     "csvtojson": "^2.0.8",
-    "googleapis": "^37.2.0",
+    "googleapis": "^43.0.0",
     "json-beautify": "^1.1.0",
     "json2lua": "^0.3.2",
+    "opn": "^6.0.0"
   }
 }

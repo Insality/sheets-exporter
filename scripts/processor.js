@@ -1,3 +1,4 @@
+const settings = require("../settings")
 const csv = require("../libs/csv")
 const saver = require("../libs/saver")
 const path = require("path")
@@ -17,7 +18,8 @@ function readFile(file, filetype, cb, filename) {
 	})
 }
 
-function load_file(sheet, rule, cb) {	
+
+function load_file(sheet, rule, cb) {
 	if (rule.file) {
 		readFile(rule.file, rule.type, cb)
 	}
@@ -30,6 +32,7 @@ function load_file(sheet, rule, cb) {
 		})
 	}
 }
+
 
 function load(sheet, list_rule, cb) {
 	if (sheet.type == "file") {
@@ -53,8 +56,12 @@ function load(sheet, list_rule, cb) {
 	}
 }
 
+
 M.process_sheet = function(sheet, special_rule) {
-	let rule = JSON.parse(fs.readFileSync(sheet.rule))
+	let rule_path = path.join(settings.runtime.config_dir, sheet.rule)
+	console.log(rule_path)
+
+	let rule = JSON.parse(fs.readFileSync(rule_path))
 
 	// get csv of selected lists
 	// Get all list names to cache it
@@ -64,7 +71,7 @@ M.process_sheet = function(sheet, special_rule) {
 			continue
 		}
 
-		list_names = rule.rules[rule_name].parts
+		list_names = rule.rules[rule_name].lists
 
 		for (let list_name in list_names) {
 			if (lists.indexOf(list_names[list_name]) < 0) {
@@ -74,7 +81,7 @@ M.process_sheet = function(sheet, special_rule) {
 	}
 
 	if (sheet.type == "csv_web") {
-		console.log("Preload lists:", lists)
+		console.log("Preload lists:", lists.join(", "))
 		csv.preload_lists(sheet.id, lists, () => {
 			start_processing(sheet, special_rule, rule)
 		})
@@ -82,6 +89,7 @@ M.process_sheet = function(sheet, special_rule) {
 		start_processing(sheet, special_rule, rule)
 	}
 }
+
 
 function start_processing(sheet, special_rule, rule) {
 	for (let rule_name in rule.rules) {
@@ -105,7 +113,7 @@ function start_processing(sheet, special_rule, rule) {
 			}
 
 			for (let j = 0; j < sheet.save.length; j++) {
-				let dist = sheet.save[j].dist
+				let dist = path.join(settings.runtime.config_dir, sheet.save[j].dist)
 				let format = sheet.save[j].format
 				let clone_json = JSON.parse(JSON.stringify(json_data))
 

@@ -1,0 +1,19 @@
+{
+	"rules": {
+		"items": {
+			"lists": ["items"]
+		},
+
+		"item_list": {
+			"lists": ["items"],
+			"handlers": [
+				{
+					"type": "values_list",
+					"config": {
+						"is_key": true
+					}
+				}
+			]
+		}
+	}
+}

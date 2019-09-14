@@ -8,5 +8,8 @@
 	"token_name": "token.json",
 
 	"ignore_export_symbol": "#",
-	"empty_value_alias": ["-", "none"]
+	"empty_value_alias": ["-", "none"],
+
+	"runtime": {},
+	"debug": false
 }

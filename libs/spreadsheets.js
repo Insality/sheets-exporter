@@ -3,6 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const readline = require('readline')
 const {google} = require('googleapis')
+const opn = require("opn")
 
 const SCOPES = [settings.google_scopes]
 const AUTH_DIR = path.join(__dirname, "..", settings.auth_dir)
@@ -15,11 +16,14 @@ function getNewToken(oAuth2Client, callback) {
 		access_type: 'offline',
 		scope: SCOPES,
 	})
+
 	console.log('Authorize this app by visiting this url:', authUrl)
 	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
 	})
+	opn(authUrl)
+
 	rl.question('Enter the code from that page here: ', (code) => {
 		rl.close()
 		oAuth2Client.getToken(code, (err, token) => {

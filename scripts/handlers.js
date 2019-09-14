@@ -105,7 +105,11 @@ function values_list(data, config) {
 	let row = []
 
 	for (let key in data) {
-		row.push(data[key][config.id])
+		if (config.is_key) {
+			row.push(key)
+		} else {
+			row.push(data[key][config.id])
+		}
 	}
 
 	return row

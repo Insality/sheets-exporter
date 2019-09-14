@@ -1,0 +1,10 @@
+{
+  "sword": { "damage": 5, "speed": 1.2, "range": 5 },
+  "axe": { "damage": 10, "speed": 2, "range": 4 },
+  "shotgun": { "damage": 15, "speed": 3, "range": 15 },
+  "pistol": { "damage": 20, "speed": 1, "range": 20 },
+  "pickaxe": { "damage": 8, "speed": 1, "range": 7 },
+  "longsword": { "damage": 12, "speed": 2.5, "range": 6 },
+  "fireball": { "damage": 20, "speed": 5, "range": 15 },
+  "frostball": { "damage": 15, "speed": 6, "range": 20 }
+}

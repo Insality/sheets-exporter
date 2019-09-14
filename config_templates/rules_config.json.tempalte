@@ -1,10 +1,10 @@
 {
 	"rules": {
 		"relics_sets": {
-			"parts": ["relics_sets"]
+			"lists": ["relics_sets"]
 		},
 		"relics_items": {
-			"parts": ["relics_items"],
+			"lists": ["relics_items"],
 			"prehandlers": [
 				{
 					"type": "add_id"
@@ -29,7 +29,7 @@
 			]
 		},
 		"relics_order": {
-			"parts": ["relics_sets"],
+			"lists": ["relics_sets"],
 			"prehandlers": [
 				{
 					"type": "add_id"
@@ -45,7 +45,7 @@
 			]
 		},
 		"level_rewards": {
-			"parts": ["level_rewards"],
+			"lists": ["level_rewards"],
 			"handlers" : [
 				{
 					"type" : "convert_array"
@@ -61,11 +61,11 @@
 			]
 		},
 		"styles": {
-			"parts": ["printer_styles"]
+			"lists": ["printer_styles"]
 		},
 
 		"printer_predefault": {
-			"parts": ["printer_predefined"],
+			"lists": ["printer_predefined"],
 			"prehandlers": [
 				{
 					"type": "add_id"
@@ -84,11 +84,11 @@
 		},
 
 		"dialogs_list": {
-			"parts": ["dialogs_list"]
+			"lists": ["dialogs_list"]
 		},
 
 		"dialogs": {
-			"parts": ["dialogs"],
+			"lists": ["dialogs"],
 			"prehandlers": [
 				{
 					"type": "add_id"
@@ -107,7 +107,7 @@
 		},
 
 		"params": {
-			"parts": ["field_params"],
+			"lists": ["field_params"],
 			"handlers": [
 				{
 					"type": "union_fields",
@@ -127,15 +127,15 @@
 		},
 
 		"alchemy": {
-			"parts": ["alchemy"]
+			"lists": ["alchemy"]
 		},
 
 		"crafts": {
-			"parts": ["crafts"]
+			"lists": ["crafts"]
 		},
 
 		"sell_items": {
-			"parts": ["sell_items"],
+			"lists": ["sell_items"],
 			"handlers": [
 				{
 					"type": "convert_array"
@@ -144,7 +144,7 @@
 		},
 
 		"shop": {
-			"parts": ["shop"],
+			"lists": ["shop"],
 			"prehandlers": [
 				{
 					"type": "add_id"
@@ -163,7 +163,7 @@
 		},
 
 		"orders": {
-			"parts": ["orders"],
+			"lists": ["orders"],
 			"handlers": [
 				{
 					"type": "convert_array"
