@@ -1,10 +1,11 @@
+const fs = require('fs')
+const path = require("path")
+
 const settings = require("../settings")
 const csv = require("../libs/csv")
 const saver = require("../libs/saver")
-const path = require("path")
 const convertor = require("../libs/convertor")
 const handlers = require("./handlers")
-const fs = require('fs')
 
 const M = {}
 
@@ -23,6 +24,7 @@ function load_file(sheet, rule, callback) {
 	if (rule.file) {
 		read_file(rule.file, rule.type, callback)
 	}
+
 	if (rule.dir) {
 		fs.readdir(rule.dir, function(err, items) {
 			for (let i in items) {
@@ -108,7 +110,7 @@ function check_custom_handlers(sheet) {
 				custom_handlers[key] = custom_handler[key]
 			}
 		}
-		handlers.set_custom_handlers(custom_handlers)
+		handlers.add_handlers(custom_handlers)
 	}
 }
 
@@ -136,7 +138,6 @@ function save_file(data, sheet, list_rule, rule_name, filename) {
 	for (let i in sheet.save) {
 		let dist = path.join(settings.runtime.config_dir, sheet.save[i].dist)
 		let format = sheet.save[i].format
-		let clone_json = JSON.parse(JSON.stringify(data))
 
 		if (sheet.wrap_with_name) {
 			list_rule.save_param = list_rule.save_param || {}
@@ -145,9 +146,9 @@ function save_file(data, sheet, list_rule, rule_name, filename) {
 
 		filename = filename || rule_name
 		if (list_rule.save_param) {
-			saver.save_param(clone_json, dist, filename, format, list_rule.save_param)
+			saver.save_param(data, dist, filename, format, list_rule.save_param)
 		} else {
-			saver.save(clone_json, dist, filename, format)
+			saver.save(data, dist, filename, format)
 		}
 	}
 }

@@ -6,7 +6,7 @@ function beautify_lua(str) {
 	let is_equal = false
 	let is_string = false
 
-	for (let i = 0; i < str.length; i++) {
+	for (let i in str) {
 		let prev = str[i-1]
 		let next = str[i+1]
 		let char = str[i]
@@ -14,6 +14,7 @@ function beautify_lua(str) {
 		if (char == "\"") {
 			is_string = !is_string
 		}
+
 		if (is_string) {
 			formatted[cur] = char
 			cur++
@@ -23,6 +24,7 @@ function beautify_lua(str) {
 		if (char == "=") {
 			is_equal = true
 		}
+
 		if (char == "{") {
 			is_equal = false
 			formatted[cur] = char

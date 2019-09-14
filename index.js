@@ -1,8 +1,9 @@
+const fs = require("fs")
+const path = require("path")
+
 const settings = require("./settings")
 const processor = require("./scripts/processor")
 
-const fs = require("fs")
-const path = require("path")
 
 const AUTH_DIR = path.join(__dirname, settings.auth_dir)
 const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
