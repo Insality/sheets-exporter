@@ -1,0 +1,11 @@
+{
+	"cache_dir": "./cache",
+	"cache_format": "json",
+	"auth_dir": "./auth",
+	"google_sheets_api_version": "v4",
+	"credentials_name": "credentials.json",
+	"token_name": "token.json",
+
+	"ignore_export_symbol": "#",
+	"empty_value_alias": ["-", "none"]
+}

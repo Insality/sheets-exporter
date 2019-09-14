@@ -3,6 +3,7 @@ const csvtojson = require('csvtojson')
 const fs = require("fs")
 const M = {}
 
+
 M.rows2json = function(rows) {
 	let data = {}
 
@@ -24,6 +25,7 @@ M.rows2json = function(rows) {
 	return data
 }
 
+
 M.check_number = function(val) {
 	if (!isNaN(parseFloat(val))) {
 		val = val.trim()
@@ -37,6 +39,7 @@ M.check_number = function(val) {
 
 	return val
 }
+
 
 M.json2rows = function(json) {
 	let rows = []
@@ -63,21 +66,24 @@ M.json2rows = function(json) {
 	return rows
 }
 
+
 M.json2csv = function(json) {
 	let rows = M.json2rows(json)
 	return rows2csv_func(M.json2rows(json))
 }
 
+
 M.csv2rows = function(csv_path, callback) {
 	csvtojson({
-	    noheader:true,
-	    output: "csv"
+		noheader:true,
+		output: "csv"
 	})
 	.fromFile(csv_path)
 	.then((csv_rows)=>{ 
 		callback(csv_rows)
 	})
 }
+
 
 M.union_rows = function(rows) {
 	// check what rows has similar headers

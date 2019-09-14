@@ -5,8 +5,7 @@ const path = require("path")
 const rimraf = require("rimraf");
 
 
-function download_export(config_folder, sheet, rule_name) {
-	let config_path = "./" + path.join(config_folder, "/config.json")
+function download_export(config_path, sheet, rule_name) {
 	let config = JSON.parse(fs.readFileSync(config_path))
 
 	console.log("Start export data. Config: " + config_path)
@@ -48,7 +47,7 @@ const commands = {
 
 function start() {
 	let root_folder = path.join(__dirname, "..")
-	console.log("Export tool. Exporter folder: " + root_folder)
+	console.log("Export tool. Exporter config: " + root_folder)
 	if (!fs.existsSync(path.join(root_folder, "auth"))) {
 		fs.mkdirSync(path.join(root_folder, "auth"));
 	}
@@ -57,13 +56,13 @@ function start() {
 		return
 	}
 
-	let config_folder = process.argv[2]
+	let config_path = process.argv[2]
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
 
 	let command = "export"
 	if (commands[command]) {
-		commands[command](config_folder, sheet, rule_name)
+		commands[command](config_path, sheet, rule_name)
 	} else {
 		console.log("Wrong arguments:")
 		console.log("Usage:")

@@ -37,7 +37,7 @@ function load(sheet, list_rule, cb) {
 		load_file(sheet, list_rule, cb)
 	}
 	if (sheet.type == "csv_web") {
-		csv.download(sheet, list_rule, (rows) => {
+		csv.load_cache(sheet, list_rule, (rows) => {
 			// union rows
 			let rows_union = convertor.union_rows(rows)
 
@@ -58,6 +58,33 @@ M.process_sheet = function(sheet, special_rule) {
 	let rule = JSON.parse(fs.readFileSync(sheet.rule))
 
 	// get csv of selected lists
+	// Get all list names to cache it
+	let lists = []
+	for (let rule_name in rule.rules) {
+		if (special_rule && rule_name !== special_rule) {
+			continue
+		}
+
+		list_names = rule.rules[rule_name].parts
+
+		for (let list_name in list_names) {
+			if (lists.indexOf(list_names[list_name]) < 0) {
+				lists.push(list_names[list_name])
+			}
+		}
+	}
+
+	if (sheet.type == "csv_web") {
+		console.log("Preload lists:", lists)
+		csv.preload_lists(sheet.id, lists, () => {
+			start_processing(sheet, special_rule, rule)
+		})
+	} else {
+		start_processing(sheet, special_rule, rule)
+	}
+}
+
+function start_processing(sheet, special_rule, rule) {
 	for (let rule_name in rule.rules) {
 		let list_rule = rule.rules[rule_name]
 

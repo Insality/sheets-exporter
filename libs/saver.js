@@ -19,12 +19,12 @@ function write_file(filename, data) {
 
 function save_csv(json, path, name, no_beatify) {
 	let csv_result = convertor.json2csv(json)
-	let filename = path + name + ".csv"
+	let filename = path + "/" + name + ".csv"
 	write_file(filename, csv_result)
 }
 
 function save_json(json, path, name, no_beatify) {
-	let filename = path + name + ".json"
+	let filename = path + "/" + name + ".json"
 	if (no_beatify) {
 		write_file(filename, JSON.stringify(json))
 	} else {
@@ -128,15 +128,13 @@ function save_lua(json, path, name, no_beatify) {
 	}
 }
 
-M.save = function(json, path, name, format, json_name, no_beatify) {
+M.save = function(json, path, name, format, no_beatify) {
+	if (!fs.existsSync(path)){
+		fs.mkdirSync(path);
+	}
+
 	if (handlers[format]) {
-		if (json_name) {
-			let new_json = {}
-			new_json[json_name] = json
-			handlers[format](new_json, path, name, no_beatify)
-		} else {
-			handlers[format](json, path, name, no_beatify)
-		}
+		handlers[format](json, path, name, no_beatify)
 	} else {
 		console.log("[ERROR]: no format type: " + format)
 	}
@@ -170,20 +168,20 @@ M.save_param = function(json, path, name, format, param) {
 				new_json = separate_in(json, separate)
 			}
 			else{
-				  if (separate.type == "map") {
-						new_json = {}
+				if (separate.type == "map") {
+					new_json = {}
+				}
+				if (separate.type == "list") {
+					new_json = []
+				}
+				for (let key in json) {
+					if (separate.type == "map") {
+						new_json[key] = separate_in(json[key], separate)
 					}
 					if (separate.type == "list") {
-						new_json = []
+						new_json.push( separate_in(json[key], separate) )
 					}
-					for (let key in json) {
-						if (separate.type == "map") {
-						  new_json[key] = separate_in(json[key], separate)
-					  }
-						if (separate.type == "list") {
-						  new_json.push( separate_in(json[key], separate) )
-					  }
-					}
+				}
 			}
 			M.save(new_json, path, name + separate.postfix, format, param.name, param.hasOwnProperty("no_beatify"))
 		}

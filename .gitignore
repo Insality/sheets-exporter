@@ -61,8 +61,11 @@ typings/
 .next
 
 
-# Sheets-exporter
+# Sheets-Exporter
 auth/
 config/
 dist/
 run_*.sh
+.cache/
+*.sublime-project
+*.sublime-workspace
