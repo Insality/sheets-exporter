@@ -140,6 +140,28 @@ function check_separate_langs(json, param, filepath, format) {
 	return true
 }
 
+
+function check_append(json, param, filepath, name, format) {
+	if (!param.is_append) {
+		return json
+	}
+	if (format !== "json") {
+		console.log("Append now working only with JSON")
+		return json
+	}
+
+	try {
+		file_data = fs.readFileSync(filepath + name + "." + format, "utf8")
+	} catch (err) {
+		file_data = "{}"
+	}
+
+	let file_json = JSON.parse(file_data) || {}
+	file_json[param.name] = json[param.name]
+	return file_json
+}
+
+
 M.save_param = function(json, filepath, name, format, param) {
 	if (param.folder) {
 		filepath = path.join(filepath, param.folder)
@@ -156,6 +178,8 @@ M.save_param = function(json, filepath, name, format, param) {
 
 	if (!is_skip_saving) {
 		json = wrap_with_name(json, param.name)
+
+		json = check_append(json, param, filepath, name, format)
 		M.save(json, filepath, name, format, param.no_beatify)
 	}
 }
