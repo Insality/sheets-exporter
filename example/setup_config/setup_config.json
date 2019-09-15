@@ -1,0 +1,8 @@
+{
+	"sheets":[{
+		"name": "basic",
+		"type": "csv_web",
+		"id": "1h0wl5y5BFzvRCaGegEA9dp348LA_-Y4_p75BJtlIgL0",
+		"rule": "./rules_setup.json"
+	}]
+}

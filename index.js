@@ -1,5 +1,6 @@
 const fs = require("fs")
 const path = require("path")
+const opn = require("opn")
 
 const settings = require("./settings")
 const processor = require("./scripts/processor")
@@ -10,22 +11,31 @@ const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
 const CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
 
 
+function check_token(config_path) {
+	if (fs.existsSync(TOKEN_PATH)) {
+		return config_path
+	}
+
+	let setup_config_path = path.join(__dirname, settings.setup_config_path)
+
+	console.log("Need to auth to create the " + settings.token_name)
+	console.log("Please restart the export to process all config")
+	console.log("Process setup config for check token is correct...")
+
+	return setup_config_path
+}
+
 function download_export(config_path, sheet, rule_name) {
+	config_path = check_token(config_path)
+
 	let config = JSON.parse(fs.readFileSync(config_path))
+	settings.runtime.config_dir = path.dirname(config_path)
 
 	console.log("Start export data. Config: " + config_path)
 	console.log(sheet || "All sheets,", rule_name || "all rules")
 
-	let is_token_exist = fs.existsSync(TOKEN_PATH)
 
 	for (let i in config.sheets) {
-		if (i > 0 && !is_token_exist) {
-			console.log("Need to auth to create the " + settings.token_name)
-			console.log("Process only one sheet to get auth...")
-			console.log("Please restart the export to process all config")
-			return 0
-		}
-
 		if (!sheet) {
 			processor.process_sheet(config.sheets[i], rule_name)
 		} else {
@@ -44,6 +54,7 @@ function setup() {
 	console.log("https://developers.google.com/drive/api/v3/quickstart/nodejs")
 	console.log()
 	console.log("And place credentials in " + CREDENTIALS_PATH)
+	opn("https://developers.google.com/drive/api/v3/quickstart/nodejs")
 }
 
 
@@ -66,8 +77,6 @@ function start() {
 	let config_path = process.argv[2]
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
-
-	settings.runtime.config_dir = path.dirname(config_path)
 
 	let command = "export"
 	if (commands[command]) {

@@ -6,6 +6,7 @@
 	"google_scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 	"credentials_name": "credentials.json",
 	"token_name": "token.json",
+	"setup_config_path": "./example/setup_config/setup_config.json",
 
 	"ignore_export_symbol": "#",
 	"empty_value_alias": ["-", "none"],
