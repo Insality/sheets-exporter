@@ -17,9 +17,13 @@ M.use = function(data, handler) {
 
 M.add_handlers = function(new_handlers) {
 	for (let key in new_handlers) {
+		if (handlers[key]) {
+			console.log("[ERROR]: Overriding handler key", key)
+		}
 		handlers[key] = new_handlers[key]
 	}
 }
+
 
 M.add_handlers(prehandlers)
 M.add_handlers(default_handlers)

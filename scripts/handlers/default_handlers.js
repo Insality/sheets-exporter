@@ -172,7 +172,7 @@ function group_by(data, config) {
 
 	if (config.repeat) {
 		for (let key in new_json) {
-			new_json[key][config.list_name] = union_by(new_json[key][config.list_name], config.repeat)
+			new_json[key][config.list_name] = group_by(new_json[key][config.list_name], config.repeat)
 		}
 	}
 

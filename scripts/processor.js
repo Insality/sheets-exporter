@@ -116,14 +116,14 @@ function check_custom_handlers(sheet) {
 
 
 function start_processing(sheet, special_rule, rule) {
+	check_custom_handlers(sheet)
+
 	for (let rule_name in rule.rules) {
 		let list_rule = rule.rules[rule_name]
 
 		if (special_rule && rule_name !== special_rule) {
 			continue
 		}
-
-		check_custom_handlers(sheet)
 
 		load(sheet, list_rule, (json_data, filename) => {
 			json_data = apply_handlers(json_data, sheet.all_handlers)
@@ -141,7 +141,7 @@ function save_file(data, sheet, list_rule, rule_name, filename) {
 
 		if (sheet.wrap_with_name) {
 			list_rule.save_param = list_rule.save_param || {}
-			list_rule.save_param.name = rule_name
+			list_rule.save_param.name = list_rule.save_param.name || rule_name
 		}
 
 		filename = filename || rule_name

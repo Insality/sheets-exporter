@@ -64,6 +64,51 @@ M.save = function(json, filepath, name, format, no_beatify) {
 }
 
 
+function separate_in(data, separate) {
+	let new_json = {}
+	for (let j = 0; j < separate.fields.length; j++) {
+		let fkey = separate.fields[j]
+		new_json[fkey] = data[fkey]
+		delete data[fkey]
+	}
+	return new_json
+}
+
+
+function check_separate(json, save_param, filepath, name, format) {
+	if (!save_param.separate) {
+		return
+	}
+
+	for (let i in save_param.separate) {
+		let separate = save_param.separate[i]
+		let new_json
+		if (separate.direct){
+			new_json = separate_in(json, separate)
+		}
+		else{
+			  if (separate.type == "map") {
+					new_json = {}
+				}
+				if (separate.type == "list") {
+					new_json = []
+				}
+				for (let key in json) {
+					if (separate.type == "map") {
+						new_json[key] = separate_in(json[key], separate)
+					}
+					if (separate.type == "list") {
+						new_json.push(separate_in(json[key], separate))
+					}
+				}
+		}
+
+		new_json = wrap_with_name(new_json, save_param.name)
+		M.save(new_json, filepath, name + separate.postfix, format, save_param.no_beatify)
+	}
+}
+
+
 function wrap_with_name(json, name) {
 	if (name) {
 		let temp_json = {}
@@ -74,36 +119,45 @@ function wrap_with_name(json, name) {
 }
 
 
+function check_separate_langs(json, param, filepath, format) {
+	if (!param.separate_langs) {
+		return false
+	}
+
+	let langs = param.separate_langs
+	for (let i in langs) {
+		let new_json = {}
+		for (let key in json) {
+			new_json[key] = json[key][langs[i]]
+		}
+		let filename = langs[i]
+		if (param.filename) { 
+			filename = param.filename + "_" + langs[i]
+		}
+		M.save(new_json, filepath, filename, format, param.no_beatify)
+	}
+
+	return true
+}
+
 M.save_param = function(json, filepath, name, format, param) {
 	if (param.folder) {
 		filepath = path.join(filepath, param.folder)
 	}
 	fs.mkdirSync(filepath, {recursive: true})
 
-	json = wrap_with_name(json, param.name)
-
 	if (param.filename) {
 		name = param.filename
 	}
 
-	if (param.separate_langs) {
-		let langs = param.separate_langs
-		for (let i in langs) {
-			let new_json = {}
-			for (let key in json) {
-				new_json[key] = json[key][langs[i]]
-			}
-			let filename = langs[i]
-			if (param.filename) { 
-				filename = param.filename + "_" + langs[i]
-			}
-			M.save(new_json, filepath, filename, format, param.no_beatify)
-		}
-		// dont save locales itself
-		return
-	}
+	// Split json to several files. Fields from original will be deleted
+	check_separate(json, param, filepath, name, format)
+	let is_skip_saving = check_separate_langs(json, param, filepath, format)
 
-	M.save(json, filepath, name, format, param.no_beatify)
+	if (!is_skip_saving) {
+		json = wrap_with_name(json, param.name)
+		M.save(json, filepath, name, format, param.no_beatify)
+	}
 }
 
 
