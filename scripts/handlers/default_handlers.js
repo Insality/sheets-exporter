@@ -49,19 +49,12 @@ function extract_id(data, config) {
 function array_to_map(data, config){
 	for (let key in data) {
 		let record = data[key]
-		for (let i in config) {
-			if (!record.hasOwnProperty(config[i].field) ){
-				continue
-			}
-			let array = []
-			for(let k in record[config[i].field]){
-				let new_json = {}
-				for(let j in config[i].keys){
-					new_json[config[i].keys[j]] = record[config[i].field][k][j]
-				}
-				array.push(new_json)
-			}
-			record[config[i].field] = array
+		let new_json = {}
+		for(let k in record[config.field]) {
+			new_json[config.keys[k]] = record[config.field][k]
+		}
+		if (Object.keys(new_json).length > 0) {
+			record[config.field] = new_json
 		}
 	}
 	return data
