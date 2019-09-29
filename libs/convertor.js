@@ -1,6 +1,7 @@
-const rows2csv_func = require("./array-to-csv")
-const csvtojson = require('csvtojson')
 const fs = require("fs")
+const csvtojson = require('csvtojson')
+const rows2csv_func = require("./array-to-csv")
+
 const M = {}
 
 
