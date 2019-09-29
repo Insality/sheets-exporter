@@ -238,6 +238,26 @@ function convert_array(data, config) {
 }
 
 
+function convert_boolean(data, config) {
+	for (let key in data) {
+		let record = data[key]
+
+		for (let rkey in record) {
+			let val = record[rkey]
+
+			if (val == "true" || val == "True" || val == "TRUE") {
+				record[rkey] = true
+			}
+			if (val == "false" || val == "False" || val == "FALSE") {
+				record[rkey] = true
+			}
+		}
+	}
+
+	return data
+}
+
+
 function only_fields(data, config) {
 	let new_json = {}
 
@@ -302,6 +322,9 @@ module.exports = {
 
 	// Convert record like <16 42> to [16, 42] json Array
 	convert_array: convert_array,
+
+	// Convert boolean strings to boolean
+	convert_boolean: convert_boolean,
 
 	// Union pointed fields to map
 	nest_data: nest_data,
