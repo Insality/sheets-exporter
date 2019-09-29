@@ -8,7 +8,15 @@ let handlers = {}
 
 M.use = function(data, handler) {
 	if (handlers[handler.type]) {
-		return handlers[handler.type](data, handler.config)
+		let config = handler.config
+		if (Array.isArray(config)) {
+			for (let i in config) {
+				data = handlers[handler.type](data, config[i])
+			}
+			return data
+		} else {
+			return handlers[handler.type](data, config)
+		}
 	} else {
 		console.log("[ERROR]: no handler with name: " + handler.type)
 	}
