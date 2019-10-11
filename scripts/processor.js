@@ -105,7 +105,8 @@ function check_custom_handlers(sheet) {
 	if (sheet.handlers) {
 		let custom_handlers = {}
 		for (let i in sheet.handlers) {
-			let custom_handler = require(sheet.handlers[i])
+			let handler_path = path.join(settings.runtime.config_dir, sheet.handlers[i])
+			let custom_handler = eval(fs.readFileSync(handler_path, "utf8"))
 			for (let key in custom_handler) {
 				custom_handlers[key] = custom_handler[key]
 			}
