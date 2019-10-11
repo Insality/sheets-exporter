@@ -242,7 +242,7 @@ function convert_boolean(data, config) {
 				record[rkey] = true
 			}
 			if (val == "false" || val == "False" || val == "FALSE") {
-				record[rkey] = true
+				delete record[rkey]
 			}
 		}
 	}

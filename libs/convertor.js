@@ -27,7 +27,8 @@ M.rows2json = function(rows) {
 }
 
 
-M.check_number = function(val) {
+M.check_number = function(original) {
+	let val = original
 	if (!isNaN(parseFloat(val))) {
 		val = val.trim()
 		if (val.indexOf(".") !== -1) {
@@ -38,7 +39,7 @@ M.check_number = function(val) {
 		}
 	}
 
-	return val
+	return original
 }
 
 

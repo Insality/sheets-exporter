@@ -34,7 +34,6 @@ function download_export(config_path, sheet, rule_name) {
 	console.log("Start export data. Config: " + config_path)
 	console.log(sheet || "All sheets,", rule_name || "all rules")
 
-
 	for (let i in config.sheets) {
 		if (!sheet) {
 			processor.process_sheet(config.sheets[i], rule_name)
