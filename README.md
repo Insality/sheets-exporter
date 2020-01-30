@@ -1,4 +1,4 @@
-![](media/exporter_logo)
+![](media/exporter_logo.png)
 
 Sheets Exporter - CLI software for automated processing and save data from Google Sheets
 
