@@ -5,11 +5,7 @@
 		},
 		"relics_items": {
 			"lists": ["relics_items"],
-			"prehandlers": [
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list",
 			"handlers": [
 				{
 					"type": "union_by",
@@ -30,11 +26,7 @@
 		},
 		"relics_order": {
 			"lists": ["relics_sets"],
-			"prehandlers": [
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list",
 			"handlers": [
 				{
 					"type": "values_list",
@@ -66,11 +58,7 @@
 
 		"printer_predefault": {
 			"lists": ["printer_predefined"],
-			"prehandlers": [
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list",
 			"handlers": [
 				{
 					"type": "union_by",
@@ -89,11 +77,7 @@
 
 		"dialogs": {
 			"lists": ["dialogs"],
-			"prehandlers": [
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list",
 			"handlers": [
 				{
 					"type": "union_by",
@@ -145,11 +129,7 @@
 
 		"shop": {
 			"lists": ["shop"],
-			"prehandlers": [
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list",
 			"handlers": [
 				{
 					"type": "union_by",

@@ -1,21 +1,20 @@
-const settings = require("../settings")
-
-const spreadsheets = require('./spreadsheets')
-const {google} = require('googleapis')
-const convertor = require("./convertor")
-const saver = require("./saver");
 const fs = require("fs");
-const folders = require("platform-folders");
 const path = require("path");
+const {google} = require('googleapis')
+const folders = require("platform-folders");
+
+const saver = require("./saver");
+const settings = require("../settings")
+const convertor = require("./convertor")
+const spreadsheets = require('./spreadsheets')
 
 const M = {}
 
-
-let cache_dir = path.join(folders.getDataHome(), settings.cache_dir);
+let CACHE_DIR = path.join(folders.getDataHome(), settings.app_name, settings.cache_dir);
 
 
 function get_csv(list_name, id, callback) {
-	let cached_file = path.join(cache_dir, id, list_name + "." + settings.cache_format)
+	let cached_file = path.join(CACHE_DIR, id, list_name + "." + settings.cache_format)
 	let json_cache = JSON.parse(fs.readFileSync(cached_file, "utf8"))
 
 	let values = json_cache.data
@@ -80,7 +79,7 @@ M.save_cache = function(lists, data) {
 			name: listname,
 			data: listdata,
 		}
-		saver.save(jsondata, path.join(cache_dir, sheet_id), listname, settings.cache_format, true)
+		saver.save(jsondata, path.join(CACHE_DIR, sheet_id), listname, settings.cache_format, true)
 	}
 }
 
@@ -114,5 +113,6 @@ M.preload_lists = function(sheet_id, lists, callback) {
 		})
 	})
 }
+
 
 module.exports = M

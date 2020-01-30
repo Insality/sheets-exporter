@@ -1,11 +1,11 @@
 const fs = require('fs')
 const path = require("path")
 
-const settings = require("../settings")
 const csv = require("../libs/csv")
 const saver = require("../libs/saver")
-const convertor = require("../libs/convertor")
 const handlers = require("./handlers")
+const settings = require("../settings")
+const convertor = require("../libs/convertor")
 
 const M = {}
 
@@ -49,6 +49,15 @@ function apply_handlers(data, handlers_list) {
 }
 
 
+function map_to_list(data) {
+	data[0].unshift("id")
+	for (let i = 1; i < data.length; i++) {
+		data[i].unshift(String(i))
+	}
+	return data
+}
+
+
 function load(sheet, list_rule, callback) {
 	if (sheet.type == "file") {
 		load_file(sheet, list_rule, callback)
@@ -58,7 +67,9 @@ function load(sheet, list_rule, callback) {
 		csv.load_cache(sheet, list_rule, (rows) => {
 			let rows_union = convertor.union_rows(rows)
 
-			rows_union = apply_handlers(rows_union, list_rule.prehandlers)
+			if (list_rule.type == "list") {
+				rows_union = map_to_list(rows_union)
+			}
 
 			// get the json represent
 			let json_data = convertor.rows2json(rows_union)
@@ -68,19 +79,10 @@ function load(sheet, list_rule, callback) {
 }
 
 
-M.process_sheet = function(sheet, special_rule) {
-	let rule_path = path.join(settings.runtime.config_dir, sheet.rule)
-
-	let rule = JSON.parse(fs.readFileSync(rule_path))
-
-	// get csv of selected lists
-	// Get all list names to cache it
+M.process_sheet = async function(sheet, callback) {
+	let rule = sheet.rule
 	let lists = []
 	for (let rule_name in rule.rules) {
-		if (special_rule && rule_name !== special_rule) {
-			continue
-		}
-
 		list_names = rule.rules[rule_name].lists
 
 		for (let list_name in list_names) {
@@ -90,41 +92,47 @@ M.process_sheet = function(sheet, special_rule) {
 		}
 	}
 
-	if (sheet.type == "csv_web") {
-		console.log("Preload lists:", lists.join(", "))
-		csv.preload_lists(sheet.id, lists, () => {
-			start_processing(sheet, special_rule, rule)
-		})
-	} else {
-		start_processing(sheet, special_rule, rule)
-	}
+	let promise = new Promise((resolve) => {
+		if (sheet.type == "csv_web") {
+			console.log("Preload google docs lists:", lists.join(", "))
+			csv.preload_lists(sheet.id, lists, () => {
+				start_processing(sheet, rule)
+				resolve()
+			})
+		} else {
+			start_processing(sheet, rule)
+			resolve()
+		}
+	})
+
+	await promise
+	callback()
 }
 
 
 function check_custom_handlers(sheet) {
-	if (sheet.handlers) {
-		let custom_handlers = {}
-		for (let i in sheet.handlers) {
-			let handler_path = path.join(settings.runtime.config_dir, sheet.handlers[i])
-			let custom_handler = eval(fs.readFileSync(handler_path, "utf8"))
-			for (let key in custom_handler) {
-				custom_handlers[key] = custom_handler[key]
-			}
-		}
-		handlers.add_handlers(custom_handlers)
+	if (!sheet.handlers) {
+		return
 	}
+
+	let custom_handlers = {}
+	for (let i in sheet.handlers) {
+		let handler_path = path.join(settings.runtime.config_dir, sheet.handlers[i])
+		let custom_handler = eval(fs.readFileSync(handler_path, "utf8"))
+		for (let key in custom_handler) {
+			custom_handlers[key] = custom_handler[key]
+		}
+	}
+
+	handlers.add_handlers(custom_handlers)
 }
 
 
-function start_processing(sheet, special_rule, rule) {
+function start_processing(sheet, rule) {
 	check_custom_handlers(sheet)
 
 	for (let rule_name in rule.rules) {
 		let list_rule = rule.rules[rule_name]
-
-		if (special_rule && rule_name !== special_rule) {
-			continue
-		}
 
 		load(sheet, list_rule, (json_data, filename) => {
 			json_data = apply_handlers(json_data, sheet.all_handlers)
@@ -132,12 +140,14 @@ function start_processing(sheet, special_rule, rule) {
 			save_file(json_data, sheet, list_rule, rule_name, filename)
 		})
 	}
+
+	return true
 }
 
 
 function save_file(data, sheet, list_rule, rule_name, filename) {
 	for (let i in sheet.save) {
-		let dist = path.join(settings.runtime.config_dir, sheet.save[i].dist)
+		let dist = path.join(sheet.save[i].temp_dir, sheet.save[i].temp_dist)
 		let format = sheet.save[i].format
 
 		if (sheet.wrap_with_name) {
@@ -153,6 +163,5 @@ function save_file(data, sheet, list_rule, rule_name, filename) {
 		}
 	}
 }
-
 
 module.exports = M

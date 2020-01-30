@@ -1,4 +1,3 @@
-const prehandlers = require("./handlers/prehandlers")
 const default_handlers = require("./handlers/default_handlers")
 const final_handlers = require("./handlers/final_handlers")
 
@@ -33,7 +32,6 @@ M.add_handlers = function(new_handlers) {
 }
 
 
-M.add_handlers(prehandlers)
 M.add_handlers(default_handlers)
 M.add_handlers(final_handlers)
 

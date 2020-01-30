@@ -23,6 +23,7 @@
     "json-beautify": "^1.1.0",
     "json2lua": "^0.3.2",
     "opn": "^6.0.0",
-    "platform-folders": "^0.4.1"
+    "platform-folders": "^0.4.1",
+    "underscore": "^1.9.2"
   }
 }
