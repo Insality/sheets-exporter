@@ -157,11 +157,6 @@ function help() {
 }
 
 
-const commands = {
-	"export": download_export,
-}
-
-
 function start() {
 	fs.mkdirSync(AUTH_DIR, {recursive: true})
 
@@ -180,7 +175,6 @@ function start() {
 	}
 
 	start_pipeline(config_path, sheet, rule_name)
-	// download_export(config_path, sheet, rule_name)
 }
 
 start()
