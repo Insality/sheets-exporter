@@ -1,12 +1,15 @@
-const fs = require("fs")
-const path = require("path")
-const opn = require("opn")
+#!/usr/bin/env node
+
+const fs = require("fs");
+const path = require("path");
+const opn = require("opn");
+const folders = require("platform-folders");
 
 const settings = require("./settings")
 const processor = require("./scripts/processor")
 
 
-const AUTH_DIR = path.join(__dirname, settings.auth_dir)
+const AUTH_DIR = path.join(folders.getDataHome(), settings.app_name)
 const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
 const CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
 

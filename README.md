@@ -1,6 +1,4 @@
-
-# Sheets Exporter
-#### by Insality
+![](media/exporter_logo)
 
 Sheets Exporter - CLI software for automated processing and save data from Google Sheets
 

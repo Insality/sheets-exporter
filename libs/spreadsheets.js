@@ -4,9 +4,11 @@ const path = require("path")
 const readline = require('readline')
 const {google} = require('googleapis')
 const opn = require("opn")
+const folders = require("platform-folders");
+
 
 const SCOPES = [settings.google_scopes]
-const AUTH_DIR = path.join(__dirname, "..", settings.auth_dir)
+const AUTH_DIR = path.join(folders.getDataHome(), settings.app_name)
 const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name)
 const CREDENTIALS_PATH = path.join(AUTH_DIR, settings.credentials_name)
 

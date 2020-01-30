@@ -3,13 +3,15 @@ const settings = require("../settings")
 const spreadsheets = require('./spreadsheets')
 const {google} = require('googleapis')
 const convertor = require("./convertor")
-const saver = require("./saver")
-const fs = require("fs")
-const path = require("path")
+const saver = require("./saver");
+const fs = require("fs");
+const folders = require("platform-folders");
+const path = require("path");
 
 const M = {}
 
-let cache_dir = path.join(__dirname, "..", settings.cache_dir)
+
+let cache_dir = path.join(folders.getDataHome(), settings.cache_dir);
 
 
 function get_csv(list_name, id, callback) {

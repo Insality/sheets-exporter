@@ -230,6 +230,19 @@ function convert_array(data, config) {
 	return data
 }
 
+function ensure_array(data, config) {
+	for (let key in data) {
+		let record = data[key]
+
+		let field = record[config.field]
+		if (field && typeof field !== "object") {
+			record[config.field] = [record[config.field]]
+		}
+	}
+
+	return data
+}
+
 
 function convert_boolean(data, config) {
 	for (let key in data) {
@@ -336,4 +349,7 @@ module.exports = {
 
 	// Rename pointed fields in records
 	rename_fields: rename_fields,
+
+	// Make array from non array fields (from one element)
+	ensure_array: ensure_array,
 }

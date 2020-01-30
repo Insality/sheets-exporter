@@ -1,8 +1,9 @@
 {
   "name": "sheets-exporter",
-  "version": "1.0.0",
-  "description": "CLI software for automated processing and save data from Google Sheets",
+  "version": "1.0.7",
+  "description": "CLI software for automated processing and save data from Google Sheets, local csv and json files",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +22,7 @@
     "googleapis": "^43.0.0",
     "json-beautify": "^1.1.0",
     "json2lua": "^0.3.2",
-    "opn": "^6.0.0"
+    "opn": "^6.0.0",
+    "platform-folders": "^0.4.1"
   }
 }
