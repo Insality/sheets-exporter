@@ -39,11 +39,7 @@ function move_file(from, to) {
 }
 
 
-function check_token(config_path) {
-	if (fs.existsSync(TOKEN_PATH)) {
-		return config_path
-	}
-
+function setup_token() {
 	let setup_config_path = path.join(__dirname, settings.setup_config_path)
 
 	console.log("Need to auth to create the " + settings.token_name)
@@ -55,8 +51,6 @@ function check_token(config_path) {
 
 
 async function load_config(config_path, sheet_name, rule_name) {
-	config_path = check_token(config_path)
-
 	let config = JSON.parse(fs.readFileSync(config_path))
 	settings.runtime.config_dir = path.dirname(config_path)
 
@@ -138,7 +132,7 @@ function start_pipeline(config_path, sheet, rule_name) {
 }
 
 
-function setup() {
+function setup_credentials() {
 	console.log("Start setup of sheets-exportes")
 	console.log("Please login and download credentials.json here:")
 	console.log()
@@ -150,25 +144,30 @@ function setup() {
 
 
 function help() {
-	console.log("")
 	console.log("Wrong args, usage:")
 	console.log("sheets-exporter {path_to_config} [sheet_name] [rule_name]")
 }
 
 
 function start() {
+	let config_path_arg = process.argv[2] || ""
 	fs.mkdirSync(AUTH_DIR, {recursive: true})
 
 	if (!fs.existsSync(CREDENTIALS_PATH)) {
-		setup()
+		setup_credentials()
 		return
 	}
 
-	let config_path = path.join(process.cwd(), process.argv[2])
+	let config_path
+	if (!fs.existsSync(TOKEN_PATH)) {
+		config_path = setup_token()
+	}
+
+	config_path = config_path || path.join(process.cwd(), config_path_arg)
 	let sheet = process.argv[3]
 	let rule_name = process.argv[4]
 
-	if (!config_path) {
+	if (!config_path_arg) {
 		help()
 		return
 	}

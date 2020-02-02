@@ -1,18 +1,44 @@
+
 ![](media/exporter_logo.png)
+![npm](https://img.shields.io/npm/v/sheets-exporter?label=sheets-exporter)
 
 Sheets Exporter - CLI software for automated processing and save data from Google Sheets
 
-Readme and software in process.
-
 ## Install
-Download repository
-Run `npm install` to install dependencies
 
-Make simple config (see config section)
+To install `sheets-exporter` you need to install `npm` first
 
-Run `bash run.sh`. It will ask you to go web url for download **credentials.json**. Store it in `./auth/credentials.json`
+Install _sheets-exporter_:
+`npm install -g sheets-exporter`
 
-Run second time, it will ask you go to another web url to get the token. Give access in your browser and copy token. Past it in console (just make what exporter ask you)
+### Setup credentials
+
+run sheets-exporter
+
+    sheets-exporter
+
+If you have no credentials, you will be promted to get it on:
+[https://developers.google.com/drive/api/v3/quickstart/nodejs](https://developers.google.com/drive/api/v3/quickstart/nodejs)
+
+Just enable Google Drive API
+![](media/enable_api.png)
+
+And download it to prompted folder (it will write destination in console)
+On MacOS it will be `/Users/{Username}/Library/Application Support/sheets-exporter/credentials.json`
+![](media/download_creds.png)
+
+You done with credentials!
+
+### Setup token
+Run sheets-exporter again
+
+    sheets-exporter
+
+If you have no token, exporter will use his basic config to setup your token. You will be promted to visit URL and give access to your google drive with `quickstart`
+Give it on your google account and copy token in console
+
+
+You done with token!
 
 ## Config
 There is `config.json` file, main file for check what you need to export. You can make several of it and point needed config in `bash run.sh`. 
@@ -50,11 +76,7 @@ Full handlers list see below
 		},
 		"relics_items": {
 			"parts": ["relics_items"],
-			"prehandlers": [ // Make stuff with rows, before convert to json
-				{
-					"type": "add_id"
-				}
-			],
+			"type": "list", // By default, csv imported as map, you can export all sheet as a list by add this type
 			"handlers": [ // List of how handle your documets
 				{
 					"type": "union_by", // This one will group by field to map or list
@@ -86,13 +108,7 @@ Full handlers list see below
 ```
 
 ### Handlers
-
-#### Prehandlers
-- **add_id**: Add numeric id as first value of every row. Use it if you have non unique keys and you want make list from this document
-	*params*:
-	*example*:
-
-#### Handlers
+General exporter handlers:
 - **extract_id**: Make many records from one by splitting it with different fields. Useful for localization
 	*params*:
 	*example*:
@@ -137,3 +153,7 @@ Make as npm package? For use it as tool with just config folder
 ### License
 MIT License
 By Insality
+
+## Issues and suggestions
+If you have any issues, questions or suggestions please  [create an issue](https://github.com/Insality/sheets-exporter/issues)  or contact me:  [insality@gmail.com](mailto:insality@gmail.com)
+
