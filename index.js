@@ -79,7 +79,7 @@ async function load_config(config_path, sheet_name, rule_name) {
 		}
 
 		for (let j in sheet.save) {
-			sheet.save[j].temp_dist = sheet.save[i].dist.replace(/\.\./g, ".")
+			sheet.save[j].temp_dist = sheet.save[j].dist.replace(/\.\./g, ".")
 			sheet.save[j].temp_dir = fs.mkdtempSync(os.tmpdir());
 		}
 	}
@@ -109,7 +109,6 @@ async function download_export(config) {
 
 
 async function validate_export(config) {
-	console.log("Validate step")
 	return config
 }
 

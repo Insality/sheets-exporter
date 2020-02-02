@@ -1,5 +1,4 @@
 {
-	"cache_dir": ".cache",
 	"cache_format": "json",
 	"app_name": "sheets-exporter",
 	"google_sheets_api_version": "v4",

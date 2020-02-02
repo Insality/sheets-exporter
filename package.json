@@ -1,6 +1,6 @@
 {
   "name": "sheets-exporter",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "CLI software for automated processing and save data from Google Sheets, local csv and json files",
   "main": "index.js",
   "bin": "index.js",

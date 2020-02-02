@@ -1,4 +1,5 @@
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 const {google} = require('googleapis')
 const folders = require("platform-folders");
@@ -10,7 +11,7 @@ const spreadsheets = require('./spreadsheets')
 
 const M = {}
 
-let CACHE_DIR = path.join(folders.getDataHome(), settings.app_name, settings.cache_dir);
+let CACHE_DIR = path.join(fs.mkdtempSync(os.tmpdir()));
 
 
 function get_csv(list_name, id, callback) {
