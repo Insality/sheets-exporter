@@ -9,6 +9,7 @@
 
 	"ignore_export_symbol": "#",
 	"empty_value_alias": ["-", "none"],
+	"json_export_spacing": 2,
 
 	"runtime": {},
 	"debug": false

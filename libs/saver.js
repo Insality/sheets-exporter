@@ -2,8 +2,8 @@ const beautify_lua = require("./beautify_lua")
 const convertor = require("./convertor")
 const json2lua = require('json2lua')
 const fs = require('fs')
-const beautify = require("json-beautify")
 const path = require("path")
+const settings = require("../settings")
 
 const M = {}
 
@@ -27,13 +27,30 @@ function save_csv(json, filepath, name, no_beatify) {
 }
 
 
+function get_sorted_json_keys(json) {
+	let keys = [];
+
+	for (let key in json) {
+		keys.push(key);
+		if (typeof json[key] == "object") {
+
+			let inner_json_keys = get_sorted_json_keys(json[key]);
+			for (let j in inner_json_keys) {
+				keys.push(inner_json_keys[j])
+			}
+		}
+	}
+
+	// Unique values
+	keys = keys.filter((v, i, a) => a.indexOf(v) === i); 
+	return keys.sort();
+}
+
+
 function save_json(json, filepath, name, no_beatify) {
 	let filename = path.join(filepath, name + ".json")
-	if (no_beatify) {
-		write_file(filename, JSON.stringify(json))
-	} else {
-		write_file(filename, beautify(json, null, 2, 120))
-	}
+	let text_data = JSON.stringify(json, get_sorted_json_keys(json), settings.json_export_spacing)
+	write_file(filename, text_data)
 }
 
 
