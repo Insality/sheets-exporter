@@ -314,6 +314,14 @@ function rename_fields(data, config) {
 }
 
 
+function to_map(data, config) {
+	for (let key in data) {
+		data[key] = data[key][config.field]
+	}
+	return data
+}
+
+
 module.exports = {
 	// делит одну запись на несколько, меняя ID и используя указанные из полей
 	// для каждой из них. В ключ дописывается постфикс
@@ -352,4 +360,7 @@ module.exports = {
 
 	// Make array from non array fields (from one element)
 	ensure_array: ensure_array,
+
+	// Convert table value to simple value from field, convert data to simple key-value
+	to_map: to_map,
 }
