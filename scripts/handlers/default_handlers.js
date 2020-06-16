@@ -255,6 +255,17 @@ function convert_number(data, config) {
 }
 
 
+function convert_string(data, config) {
+	for (let key in data) {
+		let record = data[key]
+
+		record[config.field] = String(record[config.field])
+	}
+
+	return data
+}
+
+
 function convert_boolean(data, config) {
 	for (let key in data) {
 		let record = data[key]
@@ -351,8 +362,11 @@ module.exports = {
 	// Convert boolean strings to boolean
 	convert_boolean: convert_boolean,
 
-	// Convertf field to number
+	// Convert field to number
 	convert_number: convert_number,
+
+	// Convert field to string
+	convert_string: convert_string,
 
 	// Union pointed fields to map
 	nest_data: nest_data,
