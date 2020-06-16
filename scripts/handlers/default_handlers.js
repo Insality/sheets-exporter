@@ -244,6 +244,17 @@ function ensure_array(data, config) {
 }
 
 
+function convert_number(data, config) {
+	for (let key in data) {
+		let record = data[key]
+
+		record[config.field] = convertor.check_number(record[config.field])
+	}
+
+	return data
+}
+
+
 function convert_boolean(data, config) {
 	for (let key in data) {
 		let record = data[key]
@@ -339,6 +350,9 @@ module.exports = {
 
 	// Convert boolean strings to boolean
 	convert_boolean: convert_boolean,
+
+	// Convertf field to number
+	convert_number: convert_number,
 
 	// Union pointed fields to map
 	nest_data: nest_data,
