@@ -46,6 +46,27 @@ function extract_id(data, config) {
 }
 
 
+function add_id_by_values(data, config) {
+	for (let index in config.ids) {
+		let id = config.ids[index]
+		let record = data[id];
+
+		let record_keys = Object.keys(record);
+		for (let i in record_keys) {
+			let new_id = id + "_" + record_keys[i]
+			data[new_id] = data[new_id] = {};
+			for (let j in record_keys) {
+				data[new_id][record_keys[j]] = record[record_keys[i]]
+			}
+		}
+	}
+
+	console.log(data["lang_name_ru"])
+
+	return data
+}
+
+
 function array_to_map(data, config){
 	for (let key in data) {
 		let record = data[key]
@@ -351,6 +372,9 @@ module.exports = {
 
 	// Add record key as value in this record
 	add_id_as_field: add_id_as_field,
+
+	// Add new ids from values list, add postfix from values
+	add_id_by_values: add_id_by_values,
 
 	// Group elements by key and union records under this key
 	// Can be recursive
