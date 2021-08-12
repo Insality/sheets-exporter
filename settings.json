@@ -6,6 +6,8 @@
 	"credentials_name": "credentials.json",
 	"token_name": "token.json",
 	"setup_config_path": "./example/setup_config/setup_config.json",
+	"default_config_path": "./export_config/",
+	"default_config_name": "config.json",
 
 	"ignore_export_symbol": "#",
 	"empty_value_alias": ["-", "none"],
