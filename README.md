@@ -1,7 +1,6 @@
-
-
 ![](media/exporter_logo.png)
 [![npm](https://img.shields.io/npm/v/sheets-exporter?label=sheets-exporter)](https://www.npmjs.com/package/sheets-exporter)
+
 Sheets Exporter - CLI software for processing and save data from Google Sheets in seconds.
 
 ## Features
