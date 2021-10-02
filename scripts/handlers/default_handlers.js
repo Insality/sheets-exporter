@@ -392,6 +392,9 @@ module.exports = {
 	// Convert field to string
 	convert_string: convert_string,
 
+	// Make array from non array fields (from one element)
+	convert_array: convert_array,
+
 	// Union pointed fields to map
 	nest_data: nest_data,
 
@@ -409,9 +412,6 @@ module.exports = {
 
 	// Rename pointed fields in records
 	rename_fields: rename_fields,
-
-	// Make array from non array fields (from one element)
-	ensure_array: ensure_array,
 
 	// Convert table value to simple value from field, convert data to simple key-value
 	to_map: to_map,

@@ -1,0 +1,10 @@
+{
+	"name": "{CONFIG_NAME}",
+	"type": "csv_web",
+	"id": "{GOOGLE_SHEETS_ID}",
+	"rule": "./rules_{CONFIG_NAME}.json",
+	"save": [{
+		"dist": "./export_result/",
+		"format": "json"
+	}]
+}
