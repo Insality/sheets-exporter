@@ -1,36 +1,23 @@
 # Handlers
 
-General exporter handlers:
-- **extract_id**: Make many records from one by splitting it with different fields. Useful for localization
-	*params*:
-	*example*:
-- **add_id_as_field**: Add key of the record to record data
-	*params*:
-	*example*:
-- **union_fields**: Make array from pointed fields
-	*params*:
-	*example*:
-- **union_by**: group records by field. This field will be on upper level of json struct. Can be recursive
-	*params*:
-	*example*:
-- **convert_array**:  Make array from strings like `<26, 36, 42>` to [26, 36, 42]
-	*params*:
-	*example*:
-- **convert_field** Format values by some rules. For example: percents
-	*params*:
-	*example*:
-- **nest_data**: Union pointed fields to json with pointed key
-	*params*:
-	*example*:
-- **set_name**: Add name before all json. It will change json struct. Usually use before saving
-	*params*:
-	*example*:
+## Handlers list
 
-#### Last handlers
-Should be last, because change the structure of json
-- **values_list**: Make a list of values of some field
-	*params*:
-	*example*:
-- **to_list**: Make list instead of dictionary
-	*params*:
-	*example*:
+- **add_id_as_field** - Add record key as value in record
+- **add_id_by_values** - Add new ids from values list, add postfix for id from values
+- **array_to_map** - Transform array value <v1 v2 v3> to map with specific keys
+- **convert_array** - Convert record like <16 42> to [14, 62] json Array
+- **convert_boolean** - Convert boolean strings to boolean ("true"/"false" strings)
+- **convert_number** - Convert field to number
+- **convert_string** - Convert field to string
+- **extract_id** - Split record on several records. Take fields and change id with key postfix
+- **group_by** - Group elements by key and union records under this key, can be recursive
+- **nest_data** - Union pointed fields to map
+- **only_fields** - Remove all ids except pointed in records
+- **remove_fields** - Remove pointed fields in records
+- **rename_fields** - Rename pointed fields in records
+- **to_map** - Convert record to value from this record
+- **union_fields** - Union fields to map or array. Fields can be renamed
+
+## Final Handlers list
+- **values_list** - Use only key or specific value from records and generate array from it
+- **to_list** - Transform map structure to array structure

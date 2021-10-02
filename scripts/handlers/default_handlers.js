@@ -249,19 +249,6 @@ function convert_array(data, config) {
 	return data
 }
 
-function ensure_array(data, config) {
-	for (let key in data) {
-		let record = data[key]
-
-		let field = record[config.field]
-		if (field && typeof field !== "object") {
-			record[config.field] = [record[config.field]]
-		}
-	}
-
-	return data
-}
-
 
 function convert_number(data, config) {
 	for (let key in data) {
@@ -364,24 +351,22 @@ function to_map(data, config) {
 
 
 module.exports = {
-	// делит одну запись на несколько, меняя ID и используя указанные из полей
-	// для каждой из них. В ключ дописывается постфикс
+	// Split record on several records. Take fields and change id with key postfix
 	extract_id: extract_id,
 
 	// Add record key as value in this record
 	add_id_as_field: add_id_as_field,
 
-	// Add new ids from values list, add postfix from values
+	// Add new ids from values list, add postfix for id from values
 	add_id_by_values: add_id_by_values,
 
-	// Group elements by key and union records under this key
-	// Can be recursive
+	// Group elements by key and union records under this key, can be recursive
 	group_by: group_by,
 
 	// Convert record like <16 42> to [16, 42] json Array
 	convert_array: convert_array,
 
-	// Convert boolean strings to boolean
+	// Convert boolean strings to boolean ("true"/"false" strings)
 	convert_boolean: convert_boolean,
 
 	// Convert field to number
@@ -389,9 +374,6 @@ module.exports = {
 
 	// Convert field to string
 	convert_string: convert_string,
-
-	// Make array from non array fields (from one element)
-	convert_array: convert_array,
 
 	// Union pointed fields to map
 	nest_data: nest_data,
@@ -411,6 +393,6 @@ module.exports = {
 	// Rename pointed fields in records
 	rename_fields: rename_fields,
 
-	// Convert table value to simple value from field, convert data to simple key-value
+	// Convert record to value from this record
 	to_map: to_map,
 }

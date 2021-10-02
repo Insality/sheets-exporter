@@ -50,15 +50,6 @@ It's look like:
 					}
 				}
 			]
-		},
-
-		"orders": {
-			"parts": ["orders"],
-			"handlers": [
-				{
-					"type": "convert_array" // Make strings like <some, string, 2> to value [some, string, 2]
-				}
-			]
 		}
 	}
 }

@@ -48,10 +48,10 @@ For more information how edit configs and use default and custom handlers please
 
 ## Documentation
 To better understand **sheets-exporter**, read the following documentation:
-- [Install](docs/01-installation.md)
-- [Configs](docs/02-configs.md)
-- [Handlers](docs/03-handlers.md)
-- [See FAQ article](docs_md/FAQ.md)
+- [Install](docs/01_installation.md)
+- [Configs](docs/02_configs.md)
+- [Handlers](docs/03_handlers.md)
+- [See FAQ article](docs/04_faq.md)
 
 
 ## License
