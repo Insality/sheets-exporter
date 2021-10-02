@@ -61,8 +61,6 @@ function add_id_by_values(data, config) {
 		}
 	}
 
-	console.log(data["lang_name_ru"])
-
 	return data
 }
 

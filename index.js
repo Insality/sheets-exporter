@@ -9,7 +9,7 @@ const folders = require("platform-folders");
 
 const settings = require("./settings");
 const processor = require("./scripts/processor");
-const config_utils = require("./scripts/config_utils")
+const config_utils = require("./scripts/config_utils");
 
 const AUTH_DIR = path.join(folders.getDataHome(), settings.app_name);
 const TOKEN_PATH = path.join(AUTH_DIR, settings.token_name);
@@ -53,38 +53,38 @@ function setup_token() {
 
 
 async function load_config(config_path, sheet_name, rule_name) {
-	let config = JSON.parse(fs.readFileSync(config_path))
-	settings.runtime.config_dir = path.dirname(config_path)
+	let config = JSON.parse(fs.readFileSync(config_path));
+	settings.runtime.config_dir = path.dirname(config_path);
 
 	if (sheet_name) {
 		config.sheets = config.sheets.filter((sheet) => {
-			return sheet.name == sheet_name
+			return sheet.name == sheet_name;
 		})
 	}
 
 	// Post-process config
 	for (let i in config.sheets) {
-		let sheet = config.sheets[i]
-		let rule_path = path.join(settings.runtime.config_dir, sheet.rule)
-		sheet.rule = JSON.parse(fs.readFileSync(rule_path))
+		let sheet = config.sheets[i];
+		let rule_path = path.join(settings.runtime.config_dir, sheet.rule);
+		sheet.rule = JSON.parse(fs.readFileSync(rule_path));
 
 		if (rule_name) {
-			let single_rule = {}
-			single_rule[rule_name] = sheet.rule.rules[rule_name]
-			sheet.rule.rules = single_rule
+			let single_rule = {};
+			single_rule[rule_name] = sheet.rule.rules[rule_name];
+			sheet.rule.rules = single_rule;
 		}
 
 		for (let j in sheet.save) {
-			sheet.save[j].temp_dist = sheet.save[j].dist.replace(/\.\./g, ".")
+			sheet.save[j].temp_dist = sheet.save[j].dist.replace(/\.\./g, ".");
 			sheet.save[j].temp_dir = fs.mkdtempSync(os.tmpdir());
 		}
 	}
 
-	console.log("Start export data")
-	console.log("Config path:", config_path)
-	console.log("Sheet:", sheet_name || "All sheets")
-	console.log("Rule:", rule_name || "All rules")
-	console.log("")
+	console.log("Start export data");
+	console.log("Config path:", config_path);
+	console.log("Sheet:", sheet_name || "All sheets");
+	console.log("Rule:", rule_name || "All rules");
+	console.log("");
 
 	return config
 }
@@ -92,34 +92,34 @@ async function load_config(config_path, sheet_name, rule_name) {
 
 async function download_export(config) {
 	let promise = new Promise((resolve) => {
-		let part_resolve = underscore.after(config.sheets.length, resolve)
+		let part_resolve = underscore.after(config.sheets.length, resolve);
 
 		for (let i in config.sheets) {
-			processor.process_sheet(config.sheets[i], part_resolve)
+			processor.process_sheet(config.sheets[i], part_resolve);
 		}
 	})
 
-	await promise
-	return config
+	await promise;
+	return config;
 }
 
 
 async function validate_export(config) {
-	return config
+	return config;
 }
 
 
 async function apply_data(config) {
 	for (let i in config.sheets) {
 		for (let j in config.sheets[i].save) {
-			let save_param = config.sheets[i].save[j]
-			let files = walk_sync(save_param.temp_dir)
+			let save_param = config.sheets[i].save[j];
+			let files = walk_sync(save_param.temp_dir);
 			for (let k in files) {
-				let from_path = path.join(save_param.temp_dir, save_param.temp_dist, files[k])
-				let to_path = path.join(settings.runtime.config_dir, save_param.dist, files[k])
+				let from_path = path.join(save_param.temp_dir, save_param.temp_dist, files[k]);
+				let to_path = path.join(settings.runtime.config_dir, save_param.dist, files[k]);
 
-				move_file(from_path, to_path)
-				console.log("Upload file", to_path)
+				move_file(from_path, to_path);
+				console.log("Upload file", to_path);
 			}
 		}
 	}
@@ -145,14 +145,32 @@ function setup_credentials() {
 };
 
 
+function credentials_folder() {
+	console.log("Credentials path:", CREDENTIALS_PATH);
+}
+
+
 function help() {
 	console.log("");
-	console.log("sheets-exporter usage:");
-	console.log("\tsheets-exporter init");
-	console.log("\tsheets-exporter setup");
-	console.log("\tsheets-exporter add_sheet sheet_name sheet_id {config_path}");
-	console.log("\tsheets-exporter add_rule sheet_name list_name {config_path}");
+	console.log("This information")
 	console.log("\tsheets-exporter help");
+	console.log()
+	console.log("Init default sheets-exporter configs")
+	console.log("\tsheets-exporter init");
+	console.log()
+	console.log("Go to the setup credentials instruction site")
+	console.log("\tsheets-exporter setup_credentials");
+	console.log()
+	console.log("Show the credentials folder")
+	console.log("\tsheets-exporter credentials_folder");
+	console.log()
+	console.log("Add default sheet config to current config")
+	console.log("\tsheets-exporter add_sheet sheet_name sheet_id {config_path}");
+	console.log()
+	console.log("Add default rule config for specific Google list")
+	console.log("\tsheets-exporter add_rule sheet_name list_name {config_path}");
+	console.log()
+	console.log("Start export pipeline. Use default config_path by default and export all sheets and rules")
 	console.log("\tsheets-exporter export {config_path} {sheet_name} {rule_name}");
 };
 
@@ -165,35 +183,40 @@ function init_configs() {
 	}
 
 	fs.mkdirSync(DEFAULT_CONFIG_PATH, { recursive: true });
-	console.log("init configs call");
 };
 
-
-
-function add_rule() {
-	console.log("add rule call");
-};
-
-
-function add_sheet() {
-	console.log("add sheet call");
-};
 
 
 function export_configs() {
-	console.log("export configs call");
+	let config_path = process.argv[3] || DEFAULT_CONFIG_PATH;
+	if (!fs.existsSync(TOKEN_PATH)) {
+		config_path = setup_token()
+	}
+
+	if (!fs.existsSync(config_path)) {
+		console.log("ERROR: No sheets exporter config found");
+		console.log("Use `sheets-exporter init` for default config init");
+		console.log("Use `sheets-exporter add_sheet` to add Google document configs");
+		console.log("Use `sheets-exporter add_rule` to add specific Google list configs");
+		return;
+	}
+
+	let sheet = process.argv[3];
+	let rule_name = process.argv[4];
+	start_pipeline(config_path, sheet, rule_name);
 };
 
 
 let COMMANDS = {
-	// (config_path)
+	// ({config_path})
 	"init": config_utils.init_configs,
-	"setup": setup_credentials,
+	"setup_credentials": setup_credentials,
 	// (sheet_name, sheet_id, {config_path})
 	"add_sheet": config_utils.add_sheet,
 	// (sheet_name, list_name, {config_path})
 	"add_rule": config_utils.add_rule,
 	"help": help,
+	// ({config_path}, {sheet_name}, {list_name})
 	"export": export_configs,
 }
 
@@ -201,40 +224,15 @@ let COMMANDS = {
 function start() {
 	fs.mkdirSync(AUTH_DIR, {recursive: true})
 	if (!fs.existsSync(CREDENTIALS_PATH)) {
-		setup_credentials()
 		return
 	}
 
-	let command_argument_or_config = process.argv[2];
-	console.log("COMMAND", command_argument_or_config);
-
-	if (COMMANDS[command_argument_or_config]) {
-		COMMANDS[command_argument_or_config]();
-		return;
+	let command = process.argv[2];
+	if (command && COMMANDS[command]) {
+		COMMANDS[command]();
 	} else {
-		command_argument_or_config = command_argument_or_config || DEFAULT_CONFIG_PATH
-	}
-
-	let config_path
-	// TODO: Move to help and setup commands
-	if (!fs.existsSync(TOKEN_PATH)) {
-		config_path = setup_token()
-	}
-
-	config_path = config_path || command_argument_or_config
-	let sheet = process.argv[3];
-	let rule_name = process.argv[4];
-
-	if (!command_argument_or_config) {
 		help()
-		return
 	}
-
-	if (!fs.existsSync(TOKEN_PATH)) {
-		config_path = setup_token()
-	}
-
-	start_pipeline(config_path, sheet, rule_name)
 }
 
 start()
