@@ -146,8 +146,14 @@ function setup_credentials() {
 
 
 function help() {
-	console.log("Wrong args, usage:");
-	console.log("sheets-exporter {path_to_config} [sheet_name] [rule_name]");
+	console.log("");
+	console.log("sheets-exporter usage:");
+	console.log("\tsheets-exporter init");
+	console.log("\tsheets-exporter setup");
+	console.log("\tsheets-exporter add_sheet sheet_name sheet_id {config_path}");
+	console.log("\tsheets-exporter add_rule sheet_name list_name {config_path}");
+	console.log("\tsheets-exporter help");
+	console.log("\tsheets-exporter export {config_path} {sheet_name} {rule_name}");
 };
 
 
@@ -215,13 +221,17 @@ function start() {
 		config_path = setup_token()
 	}
 
-	config_path = config_path || path.join(process.cwd(), command_argument_or_config)
+	config_path = config_path || command_argument_or_config
 	let sheet = process.argv[3];
 	let rule_name = process.argv[4];
 
 	if (!command_argument_or_config) {
 		help()
 		return
+	}
+
+	if (!fs.existsSync(TOKEN_PATH)) {
+		config_path = setup_token()
 	}
 
 	start_pipeline(config_path, sheet, rule_name)

@@ -36,7 +36,7 @@ M.init_configs = function() {
 		return;
 	}
 
-	fs.mkdirSync(DEFAULT_CONFIG_PATH, { recursive: true });
+	fs.mkdirSync(path.dirname(DEFAULT_CONFIG_PATH), { recursive: true });
 	fs.writeFileSync(DEFAULT_CONFIG_PATH, DEFAULT_CONFIG_TEMPLATE);
 
 	console.log("Create default config:", DEFAULT_CONFIG_PATH);
@@ -113,6 +113,13 @@ M.add_rule = function() {
 	if (!list_name) {
 		console.log("[ERROR]: The list_name is empty")
 		help_rule_usage();
+		return;
+	}
+
+	// Check config
+	if (!fs.existsSync(config_path)) {
+		console.log("Config path:", config_path);
+		console.log("[ERROR]: The config is not exists. Create it via sheet_exporter init");
 		return;
 	}
 
