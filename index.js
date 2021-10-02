@@ -135,13 +135,8 @@ function start_pipeline(config_path, sheet, rule_name) {
 
 
 function setup_credentials() {
-	console.log("Start setup of sheets-exportes");
-	console.log("Please login and download credentials.json here:");
-	console.log();
-	console.log("https://developers.google.com/drive/api/v3/quickstart/nodejs");
-	console.log();
-	console.log("And place credentials in " + CREDENTIALS_PATH);
-	opn("https://developers.google.com/drive/api/v3/quickstart/nodejs");
+	console.log("Check setup instructions here: https://github.com/Insality/sheets-exporter/blob/master/docs/01_installation.md");
+	console.log("Place credentials in " + CREDENTIALS_PATH);
 };
 
 
