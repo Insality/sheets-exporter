@@ -1,10 +1,10 @@
 {
-  "sword_name": "Меч",
-  "sword_desc": "Длинный меч",
-  "axe_name": "Топор",
   "axe_desc": "Мощный топор!",
-  "pistol_name": "Пистолет",
+  "axe_name": "Топор",
   "pistol_desc": "Быстрый и легкий пистолет",
+  "pistol_name": "Пистолет",
+  "shotgun_desc": "Отличный дробовик",
   "shotgun_name": "Дробовик",
-  "shotgun_desc": "Отличный дробовик"
+  "sword_desc": "Длинный меч",
+  "sword_name": "Меч"
 }

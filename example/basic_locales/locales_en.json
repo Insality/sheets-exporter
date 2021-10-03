@@ -1,12 +1,12 @@
 {
-  "game_title": "Game title",
-  "game_hint": "Some hint",
-  "button_ok": "Agree",
   "button_cancel": "Cancel",
-  "window_close": "Close",
-  "window_settings_header": "Settings",
-  "window_settings_hint": "You can adjust settings here",
+  "button_ok": "Agree",
   "fireball": "Fireball",
   "frostball": "Frostball",
-  "lightning": "Lightning"
+  "game_hint": "Some hint",
+  "game_title": "Game title",
+  "lightning": "Lightning",
+  "window_close": "Close",
+  "window_settings_header": "Settings",
+  "window_settings_hint": "You can adjust settings here"
 }

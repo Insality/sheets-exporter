@@ -1,10 +1,10 @@
 {
-  "sword_name": "Sword",
-  "sword_desc": "Longsword desc",
-  "axe_name": "Axe",
   "axe_desc": "Powerful axe",
-  "pistol_name": "Pistol",
+  "axe_name": "Axe",
   "pistol_desc": "Fast lightweight pistol",
+  "pistol_name": "Pistol",
+  "shotgun_desc": "Amazing shotgun",
   "shotgun_name": "Shotgun",
-  "shotgun_desc": "Amazing shotgun"
+  "sword_desc": "Longsword desc",
+  "sword_name": "Sword"
 }

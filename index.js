@@ -196,8 +196,8 @@ function export_configs() {
 		return;
 	}
 
-	let sheet = process.argv[3];
-	let rule_name = process.argv[4];
+	let sheet = process.argv[4];
+	let rule_name = process.argv[5];
 	start_pipeline(config_path, sheet, rule_name);
 };
 

@@ -1,12 +1,12 @@
 {
-  "game_title": "Заголовок",
-  "game_hint": "Подсказка",
-  "button_ok": "Хорошо",
   "button_cancel": "Отмена",
-  "window_close": "Закрыть",
-  "window_settings_header": "Настройки",
-  "window_settings_hint": "Вы можете настроить игру тут",
+  "button_ok": "Хорошо",
   "fireball": "Огненный шар",
   "frostball": "Ледянной шар",
-  "lightning": "Молния"
+  "game_hint": "Подсказка",
+  "game_title": "Заголовок",
+  "lightning": "Молния",
+  "window_close": "Закрыть",
+  "window_settings_header": "Настройки",
+  "window_settings_hint": "Вы можете настроить игру тут"
 }

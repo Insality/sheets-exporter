@@ -3,6 +3,8 @@
 
 Sheets Exporter - CLI software for processing and save data from Google Sheets in seconds.
 
+See  [Export Example](docs/05_example_export.md) to get the idea how it's work.
+
 ## Features
 - Single command to download data from your Google Sheets
 - Save your data in JSON/LUA/CSV format
@@ -52,6 +54,7 @@ To better understand **sheets-exporter**, read the following documentation:
 - [Configs](docs/02_configs.md)
 - [Handlers](docs/03_handlers.md)
 - [See FAQ article](docs/04_faq.md)
+- [Export Example](docs/05_example_export.md)
 
 
 ## License

@@ -1,10 +1,50 @@
 {
-  "sword": { "damage": 5, "speed": 1.2, "range": 5, "test": "bar" },
-  "axe": { "damage": 10, "speed": 2, "range": 4, "test": "bar" },
-  "shotgun": { "damage": 15, "speed": 3, "range": 15, "test": "bar" },
-  "pistol": { "damage": 20, "speed": 1, "range": 20, "test": "bar" },
-  "pickaxe": { "damage": 8, "speed": 1, "range": 7, "test": "bar" },
-  "longsword": { "damage": 12, "speed": 2.5, "range": 6, "test": "bar" },
-  "fireball": { "damage": 20, "speed": 5, "range": 15, "test": "bar" },
-  "frostball": { "damage": 15, "speed": 6, "range": 20, "test": "bar" }
+  "axe": {
+    "damage": 10,
+    "range": 4,
+    "speed": 2,
+    "test": "bar"
+  },
+  "fireball": {
+    "damage": 20,
+    "range": 15,
+    "speed": 5,
+    "test": "bar"
+  },
+  "frostball": {
+    "damage": 15,
+    "range": 20,
+    "speed": 6,
+    "test": "bar"
+  },
+  "longsword": {
+    "damage": 12,
+    "range": 6,
+    "speed": 2.5,
+    "test": "bar"
+  },
+  "pickaxe": {
+    "damage": 8,
+    "range": 7,
+    "speed": 1,
+    "test": "bar"
+  },
+  "pistol": {
+    "damage": 20,
+    "range": 20,
+    "speed": 1,
+    "test": "bar"
+  },
+  "shotgun": {
+    "damage": 15,
+    "range": 15,
+    "speed": 3,
+    "test": "bar"
+  },
+  "sword": {
+    "damage": 5,
+    "range": 5,
+    "speed": 1.2,
+    "test": "bar"
+  }
 }
