@@ -3,9 +3,11 @@
 ## Default export (no handlers)
 
 **Source:**
+
 ![](export_source_items.png)
 
 **Result:**
+
 ```json
 {
   "axe": { "damage": 10, "range": 4, "speed": 2 },
@@ -22,9 +24,11 @@
 ## Handler "values list"
 
 **Source:**
+
 ![](export_source_items.png)
 
 **Result:**
+
 ```json
 [
   "sword", "axe", "shotgun", "pistol", "pickaxe", "longsword", "fireball", "frostball"
@@ -35,9 +39,11 @@
 Save param with _separate_langs_
 
 **Source:**
+
 ![](export_source_locales.png)
 
 **Result:**
+
 ```json
 // File ru.json
 {
