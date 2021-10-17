@@ -19,11 +19,11 @@
 
 **Q:** How generate several files from single list?
 
-**A:** For simple key-value extract you can use "separate_langs" save_param in rules config around the handlers section:
+**A:** For simple key-value extract you can use "separate_fields" save_param in rules config around the handlers section:
 ```json
 "handlers": [],
 "save_param": {
-	"separate_langs": [ // list of collumns to be separated
+	"separate_fields": [ // list of collumns to be separated
 		"ru", "en"
 	]
 }

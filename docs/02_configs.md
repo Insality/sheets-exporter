@@ -10,6 +10,18 @@ It's look like:
 		"type": "csv_web", // Type. Can be "csv_web" for Google Sheets or "file" for local files
 		"id": "1zMW_3dB73O--rUQ0zLlpco6RcvGNe9x-pN8qC3pqH9w", // If csv_web - ID of google sheets document
 		"rule": "../config/rules_config.json", // Path to rules config for selected document
+		"handlers": [ // Relative to this config. File for custom data handlers
+			"./custom_handlers.js"
+		],
+		"all_handlers": [ // First data handlers, accept to every file
+			{
+				"type": "convert_array"
+			},
+			{
+				"type": "convert_boolean"
+			}
+		],
+		"wrap_with_name": false, // If true, wrap all data to map, where key is filename and data is previous data
 		"save": [{ 
 			"dist": "./dist/", // Folder path for save data. Relative to this config
 			"format": "lua" // "csv", "lua" or "json"

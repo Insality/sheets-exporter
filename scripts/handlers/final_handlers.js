@@ -40,7 +40,7 @@ module.exports = {
 	// Return list from value in each record or record key
 	values_list: values_list,
 
-	// Remove keys from json, transforming data to array
+	// Remove keys from json, transforming record to array
 	to_list: to_list,
 
 	// Convert whole record simple key-value map

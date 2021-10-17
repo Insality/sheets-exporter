@@ -36,7 +36,7 @@
 ```
 
 ## Separate localization
-Save param with _separate_langs_
+Save param with _separate_fields_
 
 **Source:**
 
@@ -47,26 +47,30 @@ Save param with _separate_langs_
 ```json
 // File ru.json
 {
-  "axe_desc": "Мощный топор!",
-  "axe_name": "Топор",
-  "pistol_desc": "Быстрый и легкий пистолет",
-  "pistol_name": "Пистолет",
-  "shotgun_desc": "Отличный дробовик",
-  "shotgun_name": "Дробовик",
-  "sword_desc": "Длинный меч",
-  "sword_name": "Меч"
+  "button_cancel": "Отмена",
+  "button_ok": "Хорошо",
+  "fireball": "Огненный шар",
+  "frostball": "Ледянной шар",
+  "game_hint": "Подсказка",
+  "game_title": "Заголовок",
+  "lightning": "Молния",
+  "window_close": "Закрыть",
+  "window_settings_header": "Настройки",
+  "window_settings_hint": "Вы можете настроить игру тут"
 }
 ```
 ```json
 // File en.json
 {
-  "axe_desc": "Powerful axe",
-  "axe_name": "Axe",
-  "pistol_desc": "Fast lightweight pistol",
-  "pistol_name": "Pistol",
-  "shotgun_desc": "Amazing shotgun",
-  "shotgun_name": "Shotgun",
-  "sword_desc": "Longsword desc",
-  "sword_name": "Sword"
+  "button_cancel": "Cancel",
+  "button_ok": "Agree",
+  "fireball": "Fireball",
+  "frostball": "Frostball",
+  "game_hint": "Some hint",
+  "game_title": "Game title",
+  "lightning": "Lightning",
+  "window_close": "Close",
+  "window_settings_header": "Settings",
+  "window_settings_hint": "You can adjust settings here"
 }
 ```
