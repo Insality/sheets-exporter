@@ -5,7 +5,7 @@
 
 			"save_param": {
 				"filename": "locales",
-				"separate_langs": [
+				"separate_fields": [
 					"ru", "en"
 				]
 			}

@@ -24,6 +24,16 @@ function to_list(data, config) {
 }
 
 
+
+function to_map(data, config) {
+	for (let key in data) {
+		data[key] = data[key][config.field]
+	}
+	return data
+}
+
+
+
 module.exports = {
 	/// Should be as last handler. Change the json structure
 
@@ -32,4 +42,7 @@ module.exports = {
 
 	// Remove keys from json, transforming data to array
 	to_list: to_list,
+
+	// Convert whole record simple key-value map
+	to_map: to_map,
 }

@@ -9,12 +9,13 @@ See  [Export Example](docs/05_example_export.md) to get the idea how it's work.
 - Single command to download data from your Google Sheets
 - Save your data in JSON/LUA/CSV format
 - Use default data handlers to change your data in way your need
-- Use your custom handlers for your specific keys
+- Use your custom handlers for your specific cases
 - Use hashtag `#` for comment lines or rows in Google Sheets
-- Use `<>` for make arrays data
-- Separate one Google list for several files _(example: game localization)_
+- Use `<>` or `[]` for make arrays data in Google Sheets (need add `convert_array` handler)
+- Convert `true`/`false` (or Google checkbox values) values to json boolean values (need add `convert_boolean` handler)
+- Separate one Google list for several files _(usage example: game localization)_
 - Gather data from several Google lists in one file (for easier big data management)
-- Can process local files through rules handlers
+- Can process local files through handlers
 
 ## Install
 The installation time about 5 minutes ⏱️.
@@ -23,7 +24,7 @@ Please read the [instructions here](/docs/01_installation.md)
 ## Setup configs
 Glossary next:
  - **Config** - contains the google sheets document ID, rules for this document and how to save it.
- - **Rule** - contains information about which data is collect (lists for Google Sheets) and how it should be processed.
+ - **Rule** - contains information about which data is collect (lists for Google Sheets or local files) and how it should be processed.
  
 After successful credentials and token setup you can setup **sheets-exporter** configs:
 - In any folder use `sheets-exporter init`
@@ -43,9 +44,11 @@ The **sheets-exporter** process files inside temp folder and after successful pi
 Upload file /Users/test/export_config/export_result/TokensConfig.json
 ```
 
-You can check save folder inside your `config.json` file..
+You can check save folder inside your `config.json` file.
 
-For more information how edit configs and use default and custom handlers please read the [instructions here](/docs/02_configs.md)
+For more information how edit configs and use default and custom handlers please read the [instructions here](/docs/02_configs.md).
+
+You can check full config example here: [Full Config Example](https://github.com/Insality/defold-eva/tree/master/export_config)
 
 
 ## Documentation
@@ -55,6 +58,7 @@ To better understand **sheets-exporter**, read the following documentation:
 - [Handlers](docs/03_handlers.md)
 - [See FAQ article](docs/04_faq.md)
 - [Export Example](docs/05_example_export.md)
+- [Full Config Example](https://github.com/Insality/defold-eva/tree/master/export_config)
 
 
 ## License

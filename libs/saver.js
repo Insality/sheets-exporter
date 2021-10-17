@@ -136,20 +136,21 @@ function wrap_with_name(json, name) {
 }
 
 
-function check_separate_langs(json, param, filepath, format) {
-	if (!param.separate_langs) {
+function check_separate_fields(json, param, filepath, format) {
+	if (!param.separate_fields) {
 		return false
 	}
 
-	let langs = param.separate_langs
-	for (let i in langs) {
+	let separate_fields = param.separate_fields
+	for (let i in separate_fields) {
+		let field = separate_fields[i]
 		let new_json = {}
 		for (let key in json) {
-			new_json[key] = json[key][langs[i]]
+			new_json[key] = json[key][field]
 		}
-		let filename = langs[i]
+		let filename = field
 		if (param.filename) { 
-			filename = param.filename + "_" + langs[i]
+			filename = param.filename + "_" + field
 		}
 		M.save(new_json, filepath, filename, format, param.no_beatify)
 	}
@@ -191,7 +192,7 @@ M.save_param = function(json, filepath, name, format, param) {
 
 	// Split json to several files. Fields from original will be deleted
 	check_separate(json, param, filepath, name, format)
-	let is_skip_saving = check_separate_langs(json, param, filepath, format)
+	let is_skip_saving = check_separate_fields(json, param, filepath, format)
 
 	if (!is_skip_saving) {
 		json = wrap_with_name(json, param.name)

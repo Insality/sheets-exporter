@@ -4,8 +4,8 @@ const convertor = require("../../libs/convertor")
 function add_id_as_field(data, config) {
 	for (let key in data) {
 		let v = data[key]
-		if (config.inner_list) {
-			v = v[config.inner_list]
+		if (config.insert_to) {
+			v = v[config.insert_to]
 			for (let i in v) {
 				v[i][config.id] = key
 			}
@@ -54,7 +54,7 @@ function add_id_by_values(data, config) {
 		let record_keys = Object.keys(record);
 		for (let i in record_keys) {
 			let new_id = id + "_" + record_keys[i]
-			data[new_id] = data[new_id] = {};
+			data[new_id] = data[new_id] || {};
 			for (let j in record_keys) {
 				data[new_id][record_keys[j]] = record[record_keys[i]]
 			}
@@ -76,52 +76,6 @@ function array_to_map(data, config){
 			record[config.field] = new_json
 		}
 	}
-	return data
-}
-
-
-function union_fields(data, config) {
-	for (let key in data) {
-		let record = data[key]
-
-		if (config.union_type == "array") {
-			let result = []
-			for (let i = 0; i < config.fields.length; i++) {
-				let value = record[config.fields[i]]
-				if (value !== 0 && value != null){
-					result.push(value)
-				}
-				delete record[config.fields[i]]
-			}
-			if (result.length > 0) {
-				record[config.name] = result
-			}
-		}
-		if (config.union_type == "map") {
-			let result = {}
-
-			for (let i = 0; i < config.fields.length; i++) {
-				let value = record[config.fields[i]]
-				let field_name = config.fields[i]
-				if (config.alias) {
-					field_name = config.alias[i]
-				}
-				if (value !== 0 && value != null){
-					result[field_name] = value
-				}
-				delete record[config.fields[i]]
-			}
-			if (Object.keys(result).length > 0) {
-				if (config.add_fields) {
-					for (let k in config.add_fields) {
-						result[k] = config.add_fields[k]
-					}
-				}
-				record[config.name] = result
-			}
-		}
-	}
-
 	return data
 }
 
@@ -211,19 +165,33 @@ function make_array(str_val) {
 }
 
 
-function nest_data(data, config) {
+function union_data(data, config) {
 	for (let key in data) {
-		let record = data[key]
+		let record = data[key];
+		let new_map_id = config.parent_id;
 
-		let k = record[config.parent_id]
-		let chunk = {}
-		for (let i in config.fields) {
-			chunk[config.fields[i]] = record[config.fields[i]]
-			delete record[config.fields[i]]
+		if (config.is_array) {
+			let chunk = [];
+
+			for (let i in config.fields) {
+				let value = record[config.fields[i]];
+				if (value != null) {
+					chunk.push(value);
+				}
+				delete record[config.fields[i]];
+			}
+
+			record[new_map_id] = chunk;
+		} else {
+			let chunk = {}l
+
+			for (let i in config.fields) {
+				chunk[config.fields[i]] = record[config.fields[i]];
+				delete record[config.fields[i]];
+			}
+
+			record[new_map_id] = chunk
 		}
-
-		record[k] = chunk
-		delete record[config.parent_id]
 	}
 
 	return data
@@ -342,16 +310,9 @@ function rename_fields(data, config) {
 }
 
 
-function to_map(data, config) {
-	for (let key in data) {
-		data[key] = data[key][config.field]
-	}
-	return data
-}
-
 
 module.exports = {
-	// Split record on several records. Take fields and change id with key postfix
+	// Split record on several records. Take fields and add new ids with key postfix
 	extract_id: extract_id,
 
 	// Add record key as value in this record
@@ -363,7 +324,7 @@ module.exports = {
 	// Group elements by key and union records under this key, can be recursive
 	group_by: group_by,
 
-	// Convert record like <16 42> to [16, 42] json Array
+	// Convert record like <16 42> to [16, 42] json array
 	convert_array: convert_array,
 
 	// Convert boolean strings to boolean ("true"/"false" strings)
@@ -375,11 +336,8 @@ module.exports = {
 	// Convert field to string
 	convert_string: convert_string,
 
-	// Union pointed fields to map
-	nest_data: nest_data,
-
-	// Union fields to map or array. Fields can be renamed
-	union_fields: union_fields,
+	// Union pointed fields to map or array
+	union_data: union_data,
 
 	// Transform array value <v1, v2, v3> to map with specific keys
 	array_to_map: array_to_map,
@@ -392,7 +350,4 @@ module.exports = {
 
 	// Rename pointed fields in records
 	rename_fields: rename_fields,
-
-	// Convert record to value from this record
-	to_map: to_map,
 }

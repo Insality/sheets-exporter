@@ -19,7 +19,7 @@
 					"type": "add_id_as_field",
 					"config": {
 						"id": "set",
-						"inner_list": "items"
+						"insert_to": "items"
 					}
 				}
 			]
