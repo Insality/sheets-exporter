@@ -10,7 +10,7 @@ See  [Export Example](docs/05_example_export.md) to get the idea how it's work.
 - Save your data in JSON/LUA/CSV format
 - Use default data handlers to change your data in way your need
 - Use your custom handlers for your specific cases
-- Use hashtag `#` for comment lines or rows in Google Sheets
+- Use hashtag `#` for comment rows or columns in Google Sheets
 - Use `<>` or `[]` for make arrays data in Google Sheets (need add `convert_array` handler)
 - Convert `true`/`false` (or Google checkbox values) values to json boolean values (need add `convert_boolean` handler)
 - Separate one Google list for several files _(usage example: game localization)_
