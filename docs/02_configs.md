@@ -46,12 +46,12 @@ It's look like:
 			"type": "list", // By default, csv imported as map, you can export all sheet as a list by add this type
 			"handlers": [ // List of how handle your documents
 				{
-				// The handlers description see in other docs file (docs/03_handlers.md)
-					"type": "union_by", // This one will group by field to map or list
-					"config": {
-						"field_id": "set_id",
-						"list_name": "items",
-						"remove_fields": ["id"]
+					// The handlers description see in other docs file (docs/03_handlers.md)
+					"type": "union_data",
+						"config": {
+							"parent_id": "field_info",
+							"fields": [ "color", "damage", "type" ]
+						}
 					}
 				},
 				{
