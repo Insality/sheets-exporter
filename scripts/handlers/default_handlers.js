@@ -183,7 +183,7 @@ function union_data(data, config) {
 
 			record[new_map_id] = chunk;
 		} else {
-			let chunk = {}l
+			let chunk = {}
 
 			for (let i in config.fields) {
 				chunk[config.fields[i]] = record[config.fields[i]];
