@@ -208,6 +208,8 @@ let COMMANDS = {
 	"setup_credentials": setup_credentials,
 	// (sheet_name, sheet_id, {config_path})
 	"add_sheet": config_utils.add_sheet,
+	// ()
+	"credentials_folder": credentials_folder,
 	// (sheet_name, list_name, {config_path})
 	"add_rule": config_utils.add_rule,
 	"help": help,
