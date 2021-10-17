@@ -1,5 +1,6 @@
+
 # About install
-The installation time about 5 minutes ⏱️. The Google has changed the way to auth for Google Sheets API. Now you have to create your project to get the access.
+The installation time about 5 minutes ⏱️. The Google has changed the way to auth for Google Sheets API, so you have to create your project to get the access.
 
 # Install
 To install **sheets-exporter** use [`npm`](https://docs.npmjs.com/).
@@ -8,12 +9,17 @@ npm install -g sheets-exporter
 ```
 The **sheets-exporter** install globally, so you can access it from anywhere via `sheets-exporter`
 
+For update sheets-exporter you can use
+```bash
+npm update -g sheets-exporter
+```
+
 # Credentials
 *Credentials* - is required to define from which Google project you will get access to your documents. You can share single credentials file across your project. Other users will create their own token, if they have access.
 
 Full instructions you can see here: https://developers.google.com/drive/api/v3/quickstart/nodejs#prerequisites
 
-It's quite massive setup, so you can follow next step-by-step instructions. (Links in the headers - is a source of instructions)
+It's quite massive setup, so you can follow next step-by-step instructions. (Links in the headers - is a sources of instructions)
 
 ### [Create Project](https://developers.google.com/workspace/guides/create-project#create_a_new_google_cloud_platform_gcp_project)
 To use **sheets-exporter**, you need a Google Cloud Platform project. This project forms the basis for creating, enabling, and using all GCP services, including managing APIs.
