@@ -221,6 +221,7 @@ let COMMANDS = {
 function start() {
 	fs.mkdirSync(AUTH_DIR, {recursive: true})
 	if (!fs.existsSync(CREDENTIALS_PATH)) {
+		setup_credentials()
 		return
 	}
 

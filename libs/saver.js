@@ -20,7 +20,7 @@ function write_file(filename, data) {
 }
 
 
-function save_csv(json, filepath, name, no_beatify) {
+function save_csv(json, filepath, name, no_beautify) {
 	let csv_result = convertor.json2csv(json)
 	let filename = path.join(filepath, name + ".csv")
 	write_file(filename, csv_result)
@@ -47,14 +47,19 @@ function get_sorted_json_keys(json) {
 }
 
 
-function save_json(json, filepath, name, no_beatify) {
+function save_json(json, filepath, name, no_beautify) {
 	let filename = path.join(filepath, name + ".json")
-	let text_data = JSON.stringify(json, get_sorted_json_keys(json), settings.json_export_spacing)
+	let text_data;
+	if (no_beautify) {
+		text_data = JSON.stringify(json)
+	} else {
+		text_data = JSON.stringify(json, get_sorted_json_keys(json), settings.json_export_spacing)
+	}
 	write_file(filename, text_data)
 }
 
 
-function save_lua(json, filepath, name, no_beatify) {
+function save_lua(json, filepath, name, no_beautify) {
 	// clear json from undefined
 	json = JSON.parse(JSON.stringify(json))
 
@@ -62,7 +67,7 @@ function save_lua(json, filepath, name, no_beatify) {
 	let lua_data = json2lua.fromObject(json)
 	lua_data = "return " + lua_data
 
-	if (no_beatify) {
+	if (no_beautify) {
 		write_file(filename, lua_data)
 	} else {
 		write_file(filename, beautify_lua(lua_data))
@@ -70,11 +75,11 @@ function save_lua(json, filepath, name, no_beatify) {
 }
 
 
-M.save = function(json, filepath, name, format, no_beatify) {
+M.save = function(json, filepath, name, format, no_beautify) {
 	fs.mkdirSync(filepath, {recursive: true})
 
 	if (handlers[format]) {
-		handlers[format](json, filepath, name, no_beatify)
+		handlers[format](json, filepath, name, no_beautify)
 	} else {
 		console.log("[ERROR]: no format type: " + format)
 	}
@@ -121,7 +126,7 @@ function check_separate(json, save_param, filepath, name, format) {
 		}
 
 		new_json = wrap_with_name(new_json, save_param.name)
-		M.save(new_json, filepath, name + separate.postfix, format, save_param.no_beatify)
+		M.save(new_json, filepath, name + separate.postfix, format, save_param.no_beautify)
 	}
 }
 
@@ -152,7 +157,7 @@ function check_separate_fields(json, param, filepath, format) {
 		if (param.filename) { 
 			filename = param.filename + "_" + field
 		}
-		M.save(new_json, filepath, filename, format, param.no_beatify)
+		M.save(new_json, filepath, filename, format, param.no_beautify)
 	}
 
 	return true
@@ -198,7 +203,7 @@ M.save_param = function(json, filepath, name, format, param) {
 		json = wrap_with_name(json, param.name)
 
 		json = check_append(json, param, filepath, name, format)
-		M.save(json, filepath, name, format, param.no_beatify)
+		M.save(json, filepath, name, format, param.no_beautify)
 	}
 }
 
