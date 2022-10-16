@@ -1,4 +1,6 @@
 ![](media/exporter_logo.png)
+[![Github-sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/insality) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/insality) [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/insality)
+
 [![npm](https://img.shields.io/npm/v/sheets-exporter?label=sheets-exporter)](https://www.npmjs.com/package/sheets-exporter)
 
 Sheets Exporter - CLI software for processing and save data from Google Sheets in seconds.
@@ -12,7 +14,7 @@ See  [Export Example](docs/05_example_export.md) to get the idea how it's work.
 - Use your custom handlers for your specific cases
 - Use hashtag `#` for comment rows or columns in Google Sheets
 - Use `<>` or `[]` for make arrays data in Google Sheets (need add `convert_array` handler)
-- Convert `true`/`false` (or Google checkbox values) values to json boolean values (need add `convert_boolean` handler)
+- Convert `true` or `false` (or Google checkbox values) values to JSON boolean values (need add `convert_boolean` handler)
 - Separate one Google list for several files _(usage example: game localization)_
 - Gather data from several Google lists in one file (for easier big data management)
 - Can process local files through handlers
@@ -68,3 +70,9 @@ Developed and supported by [Insality](https://github.com/Insality)
 ## Issues and suggestions
 If you have any issues, questions or suggestions please  [create an issue](https://github.com/Insality/sheets-exporter/issues)  or contact me:  [insality@gmail.com](mailto:insality@gmail.com)
 
+
+## ❤️ Support project ❤️
+
+Please support me if you like this project! It will help me keep engaged to update this project.
+
+[![Github-sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/insality) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/insality) [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/insality)
